@@ -1,13 +1,21 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { setCookie } from 'cookies-next';
-import { COOKIE_SPOTIFY_STATE_KEY } from '../../lib/constant';
-import { generateRandomString } from '../../lib/util';
+import { COOKIE_SPOTIFY_STATE_KEY, USER_SPOTIFY_SCOPE } from '../../lib/constant';
+
+export const generateRandomString = (length: number): string => {
+	let text = '';
+	const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+	for (let i = 0; i < length; i++) {
+		text += possible.charAt(Math.floor(Math.random() * possible.length));
+	}
+	return text;
+};
 
 export type ParamName = 'client_id' | 'response_type' | 'redirect_uri' | 'state' | 'scope';
 
 const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
 const REDIRECT_URI = process.env.SPOTIFY_REDIRECT_URI;
-const scope = 'user-read-private user-read-email';
+const scope = USER_SPOTIFY_SCOPE;
 
 const Login = (req: NextApiRequest, res: NextApiResponse<void>) => {
 	const state = generateRandomString(16);

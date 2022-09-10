@@ -13,12 +13,10 @@ const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
 const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
 const REDIRECT_URI = process.env.SPOTIFY_REDIRECT_URI;
 
-const Callback = async (req: NextApiRequest, res: NextApiResponse<void>) => {
+const SpotifyMe = async (req: NextApiRequest, res: NextApiResponse<void>) => {
 	const { code, state } = req.query;
 
-	if (getCookie(COOKIE_SPOTIFY_STATE_KEY, { req, res }) !== state) {
-		throw new Error('Invalid state');
-	}
+	
 
 	const buffer = Buffer.from(`${String(CLIENT_ID)}:${String(CLIENT_SECRET)}`).toString('base64');
 	const params: Record<DataParamName, string> = {
@@ -51,4 +49,4 @@ const Callback = async (req: NextApiRequest, res: NextApiResponse<void>) => {
 	}
 };
 
-export default Callback;
+export default SpotifyMe;
