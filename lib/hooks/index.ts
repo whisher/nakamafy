@@ -12,26 +12,33 @@ const axios: AxiosInstance = _axios.create({
 	},
 	timeout: 3000
 });
+
 axios.interceptors.response.use(
 	(response) => {
 		return response;
 	},
 	(error) => {
 		console.log('ERROR HOOK', error);
-		if (error.response.status == 401) {
+		if (error.response.status === 401) {
 			refreshToken(error.request, error.response);
 		}
 	}
 );
 
-const fetcher = (token: string) => (url: string) =>
-	axios
+const fetcher = (token: string) => (url: string) => {
+	console.log('CALL');
+	return axios
 		.get(url, {
 			headers: {
 				Authorization: `Bearer ${token}`
 			}
 		})
-		.then((res) => res.data);
+		.then((res) => res.data)
+		.catch((error) => {
+			console.log('ERROR', error);
+			console.log('TOKEN', token);
+		});
+};
 
 export const useMe = (token: TokenDto) => {
 	const { access_token } = token;

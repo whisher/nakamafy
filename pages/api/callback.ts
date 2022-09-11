@@ -3,8 +3,6 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import type { TokenDto } from '../../lib/util/spotify';
 
 import axios from 'axios';
-import { getCookie } from 'cookies-next';
-import { COOKIE_SPOTIFY_STATE_KEY } from '../../lib/constant';
 import { setHttpOnlyTokenCookie } from '../../lib/util/spotify';
 
 export type DataParamName = 'grant_type' | 'code' | 'redirect_uri';
@@ -15,8 +13,6 @@ const REDIRECT_URI = process.env.SPOTIFY_REDIRECT_URI;
 
 const SpotifyMe = async (req: NextApiRequest, res: NextApiResponse<void>) => {
 	const { code, state } = req.query;
-
-	
 
 	const buffer = Buffer.from(`${String(CLIENT_ID)}:${String(CLIENT_SECRET)}`).toString('base64');
 	const params: Record<DataParamName, string> = {

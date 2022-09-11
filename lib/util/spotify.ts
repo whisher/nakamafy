@@ -34,7 +34,8 @@ export const setHttpOnlyTokenCookie = (
 		res,
 		maxAge,
 		secure,
-		httpOnly: true
+		httpOnly: true,
+		sameSite: 'lax'
 	});
 };
 
@@ -46,7 +47,6 @@ export const getHttpOnlyTokenCookie = (
 		req,
 		res
 	});
-	console.log('tokenJsonB64', tokenJsonB64);
 	if (!tokenJsonB64) {
 		return false;
 	}
@@ -105,7 +105,9 @@ export const refreshToken = async (
 		});
 		if ('data' in result) {
 			const newToken = result.data as TokenDto;
+			console.log('OLD COOKIE', isExpired, token);
 			setHttpOnlyTokenCookie(req, res, newToken);
+			console.log('NEW COOKIE', hasTokenExpired(req, res));
 			return true;
 		}
 		return false;

@@ -16,6 +16,7 @@
 		"incremental": true,
 		"baseUrl": ".",
 		"paths": {
+			"@/features/*": ["lib/features/*"],
 			"@/ui/*": ["lib/ui/*"]
 		}
 	},
