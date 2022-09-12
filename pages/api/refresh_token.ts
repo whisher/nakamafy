@@ -3,8 +3,8 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import type { TokenDto } from '../../lib/util/spotify';
 
 import axios from 'axios';
-import { getHttpOnlyTokenCookie, setHttpOnlyTokenCookie } from '../../lib/util/spotify';
-import { getCookies, getCookie, setCookie, deleteCookie } from 'cookies-next';
+import { getHttpOnlyTokenCookie } from '../../lib/util/spotify';
+
 export type DataParamName = 'grant_type' | 'refresh_token';
 
 const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
@@ -40,7 +40,7 @@ const RefreshToken = async (req: NextApiRequest, res: NextApiResponse<TokenDto |
 		if ('data' in result) {
 			const token = result.data as TokenDto;
 			console.log('API token New', token);
-			res.status(200).json(token);
+			return res.status(200).json(token);
 		}
 		throw new Error('Invalid Refresh Token');
 	} catch (error) {
