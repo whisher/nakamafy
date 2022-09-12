@@ -22,7 +22,7 @@ const Account: React.FC<AccountProps> = ({ data }) => {
 			) : (
 				<FaUser className="h-6 w-6 text-brand-200" />
 			)}
-			<span className="flex-1 pl-2 text-white/90">{display_name}</span>
+			<span className="flex-1 pl-2 text-xs text-white/90">{display_name}</span>
 		</button>
 	);
 };
