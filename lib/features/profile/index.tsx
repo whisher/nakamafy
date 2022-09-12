@@ -2,17 +2,29 @@ import React from 'react';
 import type { TokenDto } from '../../util/spotify';
 import type { MeDto } from '../../hooks/types';
 import { useSpotify } from '../../hooks';
-
+import { Account } from './account';
+import { Layout } from './layout';
 export interface ProfileProps {
 	token: TokenDto;
 }
 const Profile: React.FC<ProfileProps> = ({ token }) => {
-	const { data, error } = useSpotify<MeDto>('me', token);
-	console.log('profile', data, error);
+	const { data: me, error } = useSpotify<MeDto>('me', token);
+	console.log('profile', me, error);
+	if (error) {
+		return <div>Error</div>;
+	}
 	return (
-		<>
-			<h1>Profile</h1>
-		</>
+		<Layout>
+			{me ? (
+				<main className="">
+					<div className="flex justify-end">
+						<Account data={me} />
+					</div>
+				</main>
+			) : (
+				<p>Loading</p>
+			)}
+		</Layout>
 	);
 };
 

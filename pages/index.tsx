@@ -2,8 +2,10 @@ import type { NextPage } from 'next';
 import type { TokenExpiredDto } from '../lib/util/spotify';
 
 import { GetServerSideProps } from 'next';
-import Link from 'next/link';
+
 import { hasTokenExpired, refreshToken } from '../lib/util/spotify';
+
+import { Home } from '@/features/home';
 import { Profile } from '@/features/profile';
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
@@ -45,21 +47,9 @@ export type PageTokenExpiredDto = {
 	auth: boolean;
 	token: TokenExpiredDto['token'];
 };
-const Home: NextPage<PageTokenExpiredDto> = (data) => {
+const HomePage: NextPage<PageTokenExpiredDto> = (data) => {
 	const { auth, token } = data;
-	return (
-		<div className="">
-			{auth && !!token ? (
-				<Profile token={token} />
-			) : (
-				<h1>
-					<Link href="/api/login">
-						<a>Login</a>
-					</Link>
-				</h1>
-			)}
-		</div>
-	);
+	return <div className="">{auth && !!token ? <Profile token={token} /> : <Home />}</div>;
 };
 
-export default Home;
+export default HomePage;
