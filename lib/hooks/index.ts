@@ -6,7 +6,7 @@ import useSWR from 'swr';
 
 import { refreshToken } from 'lib/util/spotify';
 const axios: AxiosInstance = _axios.create({
-	baseURL: 'https://api.spotify.com/v1',
+	baseURL: 'http://localhost:3000/api/spotify',
 	headers: {
 		'Content-Type': 'application/json'
 	},
@@ -29,6 +29,7 @@ const fetcher = (token: string) => (url: string) => {
 	console.log('CALL');
 	return axios
 		.get(url, {
+			withCredentials: true,
 			headers: {
 				Authorization: `Bearer ${token}`
 			}

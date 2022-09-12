@@ -24,8 +24,7 @@ export const setHttpOnlyTokenCookie = (
 	token: TokenDto
 ): void => {
 	const maxAge = 60 * 60 * 24; // One day
-	const host = req.headers.host;
-	const secure = host?.includes('localhost') ? false : true;
+	const secure = process.env.NODE_ENV === 'production' ? true : false;
 	token.timestamp = Date.now();
 	let tokenJsonStr = JSON.stringify(token);
 	let tokenJsonB64 = Buffer.from(tokenJsonStr).toString('base64');
@@ -35,7 +34,7 @@ export const setHttpOnlyTokenCookie = (
 		maxAge,
 		secure,
 		httpOnly: true,
-		sameSite: 'lax'
+		sameSite: 'none'
 	});
 };
 
