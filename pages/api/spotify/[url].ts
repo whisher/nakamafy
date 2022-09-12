@@ -32,7 +32,7 @@ const Me = async (req: NextApiRequest, res: NextApiResponse<unknown>) => {
 			}
 		}
 		const { access_token } = token;
-		const result = await axios.get('/me', {
+		const result = await axios.get(`/${url}`, {
 			headers: {
 				Authorization: `Bearer ${access_token}`
 			}
