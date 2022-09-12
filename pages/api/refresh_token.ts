@@ -17,7 +17,6 @@ const RefreshToken = async (req: NextApiRequest, res: NextApiResponse<TokenDto |
 		if (!token) {
 			throw new Error('Invalid api token');
 		}
-		console.log('API token Old', token);
 		const { refresh_token } = token;
 
 		const buffer = Buffer.from(`${String(CLIENT_ID)}:${String(CLIENT_SECRET)}`).toString('base64');
@@ -39,8 +38,7 @@ const RefreshToken = async (req: NextApiRequest, res: NextApiResponse<TokenDto |
 		});
 		if ('data' in result) {
 			const token = result.data as TokenDto;
-			console.log('API token New', token);
-			return res.status(200).json(token);
+			return res.status(201).json(token);
 		}
 		throw new Error('Invalid Refresh Token');
 	} catch (error) {

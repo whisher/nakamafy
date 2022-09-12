@@ -1,15 +1,14 @@
 import React from 'react';
 import type { TokenDto } from '../../util/spotify';
-import { useMe } from '../../hooks';
+import type { MeDto } from '../../hooks/types';
+import { useSpotify } from '../../hooks';
 
 export interface ProfileProps {
-	auth: boolean;
 	token: TokenDto;
 }
-const Profile: React.FC<ProfileProps> = ({ auth, token }) => {
-	const { me, error } = useMe(token);
-	me?.country;
-	console.log('profile', me, error);
+const Profile: React.FC<ProfileProps> = ({ token }) => {
+	const { data, error } = useSpotify<MeDto>('me', token);
+	console.log('profile', data, error);
 	return (
 		<>
 			<h1>Profile</h1>

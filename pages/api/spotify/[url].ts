@@ -12,6 +12,7 @@ const axios: AxiosInstance = _axios.create({
 	timeout: 3000
 });
 const Me = async (req: NextApiRequest, res: NextApiResponse<unknown>) => {
+	const { url } = req.query;
 	try {
 		let token = getHttpOnlyTokenCookie(req, res);
 
@@ -24,12 +25,11 @@ const Me = async (req: NextApiRequest, res: NextApiResponse<unknown>) => {
 			if (!result) {
 				throw new Error('Invalid me refresh token');
 			}
-			console.log('OLD ME COOKIE', token);
+
 			token = getHttpOnlyTokenCookie(req, res);
 			if (!token) {
 				throw new Error('Invalid api me token');
 			}
-			console.log('NEW ME COOKIE', token);
 		}
 		const { access_token } = token;
 		const result = await axios.get('/me', {

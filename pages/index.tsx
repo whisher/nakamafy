@@ -46,12 +46,11 @@ export type PageTokenExpiredDto = {
 	token: TokenExpiredDto['token'];
 };
 const Home: NextPage<PageTokenExpiredDto> = (data) => {
-	console.log('OUT', data);
 	const { auth, token } = data;
 	return (
 		<div className="">
 			{auth && !!token ? (
-				<Profile auth={auth} token={token} />
+				<Profile token={token} />
 			) : (
 				<h1>
 					<Link href="/api/login">
