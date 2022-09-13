@@ -1,6 +1,5 @@
-import type { AxiosInstance } from 'axios';
 import type { TokenDto } from '../util/spotify';
-import type { MeDto } from './types';
+
 import axios from '../util/axios';
 import useSWR from 'swr';
 

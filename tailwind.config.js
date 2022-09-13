@@ -3,7 +3,7 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
-	content: ['./pages/**/*.{js,ts,jsx,tsx}', './lib/features/**/*.{js,ts,jsx,tsx}'],
+	content: ['./pages/**/*.{js,ts,jsx,tsx}', './lib/components/**/*.{js,ts,jsx,tsx}'],
 	theme: {
 		extend: {
 			colors: {
@@ -13,8 +13,11 @@ module.exports = {
 					200: '#3f3f46'
 				},
 				gray: {
+					100: '#adc5ec', // shadow top
 					200: '#e4e4e7',
-					300: '#d4d4d8'
+					300: '#d4d4d8',
+					400: '#d4d4d8',
+					500: '#586477' // shadow bottom
 				}
 			},
 			fontFamily: {

@@ -104,9 +104,7 @@ export const refreshToken = async (
 		});
 		if ('data' in result) {
 			const newToken = result.data as TokenDto;
-			console.log('OLD COOKIE', isExpired, token);
 			setHttpOnlyTokenCookie(req, res, newToken);
-			console.log('NEW COOKIE', hasTokenExpired(req, res));
 			return true;
 		}
 		return false;

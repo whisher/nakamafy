@@ -49,7 +49,10 @@ export type PageTokenExpiredDto = {
 };
 const HomePage: NextPage<PageTokenExpiredDto> = (data) => {
 	const { auth, token } = data;
-	return <div className="">{auth && !!token ? <Profile token={token} /> : <Home />}</div>;
+	if (auth && !!token) {
+		return <Profile token={token} />;
+	}
+	return <Home />;
 };
 
 export default HomePage;

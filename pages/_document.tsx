@@ -1,6 +1,6 @@
 import Document, { Head, Html, Main, NextScript } from 'next/document';
 
-class LaPalettaDocument extends Document {
+class NakamafyDocument extends Document {
 	render() {
 		return (
 			<Html lang="en">
@@ -8,7 +8,7 @@ class LaPalettaDocument extends Document {
 					<link rel="preconnect" href="https://fonts.googleapis.com" />
 					<link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
 					<link
-						href="https://fonts.googleapis.com/css2?family=Manrope&display=swap"
+						href="https://fonts.googleapis.com/css2?family=Manrope:wght@700&family=Montserrat:wght@400;600&display=swap"
 						rel="stylesheet"
 					/>
 				</Head>
@@ -21,4 +21,4 @@ class LaPalettaDocument extends Document {
 	}
 }
 
-export default LaPalettaDocument;
+export default NakamafyDocument;
