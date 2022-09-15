@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-export function middleware(request: NextRequest, res: NextResponse) {
+export function middleware(request: NextRequest) {
 	console.log('MIDDLEWARE', request);
-	console.log('MIDDLEWARE', res);
 
 	/*if (request.nextUrl.pathname === '/about') {
 		return NextResponse.redirect(new URL('/redirected', request.url));
@@ -10,7 +9,7 @@ export function middleware(request: NextRequest, res: NextResponse) {
 	if (request.nextUrl.pathname === '/another') {
 		return NextResponse.rewrite(new URL('/rewrite', request.url));
 	}*/
-	return NextResponse.next();
+	return NextResponse.next().headers;
 }
 
 export const config = {

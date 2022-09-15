@@ -13,6 +13,44 @@ export interface MeDto {
 	uri: string;
 }
 
+export interface MeFollowingDto {
+	artists: ArtistsDto;
+}
+export interface MePlaylistDto {
+	href: string;
+	items: ItemDto[];
+	limit: number;
+	next: string;
+	offset: number;
+	previous: string;
+	total: number;
+}
+
+export interface ArtistsDto {
+	href: string;
+	items: ItemDto[];
+	limit: number;
+	next: string;
+	cursors: Cursors;
+	total: number;
+}
+
+export interface ItemDto {
+	external_urls: ExternalUrlsDto;
+	followers: FollowersDto;
+	genres: string[];
+	href: string;
+	id: string;
+	images: ImageDto[];
+	name: string;
+	popularity: number;
+	type: string;
+	uri: string;
+}
+
+export interface Cursors {
+	after: string;
+}
 export interface ExplicitContentDto {
 	filter_enabled: boolean;
 	filter_locked: boolean;

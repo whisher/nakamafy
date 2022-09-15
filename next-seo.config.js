@@ -1,5 +1,6 @@
+import { APP_TITLE } from './lib/constant';
 const description = 'Nakamafy a simple clone of Spotify';
-const title = 'Nakamafy';
+const title = APP_TITLE;
 const url = process.env.NEXT_PUBLIC_BASE_URL;
 
 const seo = {
