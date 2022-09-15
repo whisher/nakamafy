@@ -1,57 +1,47 @@
 import type { NextPage } from 'next';
-import type { TokenExpiredDto } from '../lib/util/spotify';
+import type { GetServerSideProps } from 'next';
 
-import { GetServerSideProps } from 'next';
-
+import { REDIRECT_ROUTES } from '../lib/constant';
 import { hasTokenExpired, refreshToken } from '../lib/util/spotify';
-
 import { Home } from '@/features/home';
-import { Profile } from '@/features/profile';
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-	const { isExpired, token } = hasTokenExpired(req, res);
-	if (isExpired === undefined && token === null) {
+	const { profile } = REDIRECT_ROUTES;
+	const isExpired = hasTokenExpired(req, res);
+	if (isExpired === undefined) {
 		return {
-			props: {
-				auth: !!isExpired,
-				token
-			}
+			props: {}
 		};
 	} else if (isExpired) {
 		const result = await refreshToken(req, res);
 		if (!result) {
 			return {
-				props: {
-					auth: false,
-					token: null
+				props: {}
+			};
+		}
+		const isExpired = hasTokenExpired(req, res);
+		if (!isExpired) {
+			return {
+				redirect: {
+					destination: profile,
+					permanent: false
 				}
 			};
 		}
-		const { isExpired, token } = hasTokenExpired(req, res);
 		return {
-			props: {
-				auth: !isExpired,
-				token
-			}
+			props: {}
 		};
 	} else {
 		return {
-			props: {
-				auth: !isExpired,
-				token
+			redirect: {
+				destination: profile,
+				permanent: false
 			}
 		};
 	}
 };
-export type PageTokenExpiredDto = {
-	auth: boolean;
-	token: TokenExpiredDto['token'];
-};
-const HomePage: NextPage<PageTokenExpiredDto> = (data) => {
-	const { auth, token } = data;
-	if (auth && !!token) {
-		return <Profile token={token} />;
-	}
+
+const HomePage: NextPage = () => {
 	return <Home />;
 };
 

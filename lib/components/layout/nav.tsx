@@ -3,13 +3,18 @@ import Link from 'next/link';
 import { FaSpotify } from 'react-icons/fa';
 import { Menu } from './menu';
 
-import { APP_TITLE } from '../../../constant';
+import { APP_TITLE, ROUTES } from '../../constant';
 
-const Nav: React.FC = () => {
+export interface NavProps {
+	pathname: string;
+}
+
+const Nav: React.FC<NavProps> = ({ pathname }) => {
+	const { profile } = ROUTES;
 	return (
-		<div className="px-6 py-6">
+		<div className="px-6 pt-6">
 			<h1>
-				<Link href="/">
+				<Link href={profile}>
 					<a className="flex items-center">
 						<FaSpotify className="h-8 w-8 text-white" />
 						<span className="flex-1 pl-1 text-xl font-bold tracking-tighter text-white">
@@ -19,7 +24,7 @@ const Nav: React.FC = () => {
 					</a>
 				</Link>
 			</h1>
-			<Menu />
+			<Menu pathname={pathname} />
 		</div>
 	);
 };
