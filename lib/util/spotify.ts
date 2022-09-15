@@ -5,14 +5,14 @@ import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 import { COOKIE_SPOTIFY_TOKEN_KEY } from '../constant';
 import axios from './axios';
 
-export type TokenDto = {
+export interface TokenDto {
 	access_token: string;
 	token_type: 'Bearer';
 	expires_in: number;
 	refresh_token: string;
 	scope: string;
 	timestamp?: number;
-};
+}
 
 export type NextRequest = IncomingMessage & {
 	cookies?: { [key: string]: string } | Partial<{ [key: string]: string }>;
@@ -25,7 +25,7 @@ export const setHttpOnlyTokenCookie = (
 ): void => {
 	const maxAge = 60 * 60 * 24; // One day
 	const secure = process.env.NODE_ENV === 'production' ? true : false;
-	token.timestamp = Date.now();
+	token.timestamp = Date.now() - 1000 * 60; // refresh token one minute before expired
 	let tokenJsonStr = JSON.stringify(token);
 	let tokenJsonB64 = Buffer.from(tokenJsonStr).toString('base64');
 	setCookie(COOKIE_SPOTIFY_TOKEN_KEY, tokenJsonB64, {
@@ -51,28 +51,18 @@ export const getHttpOnlyTokenCookie = (
 	}
 	return JSON.parse(Buffer.from(String(tokenJsonB64), 'base64').toString('ascii')) as TokenDto;
 };
-export type TokenExpiredDto = {
-	isExpired: boolean | undefined;
-	token: TokenDto | null;
-};
+
 export const hasTokenExpired = (
 	req: NextApiRequest | NextRequest,
 	res: NextApiResponse | ServerResponse
-): TokenExpiredDto => {
+): boolean | undefined => {
 	const token = getHttpOnlyTokenCookie(req, res);
 	if (!token) {
-		return {
-			isExpired: undefined,
-			token: null
-		};
+		return undefined;
 	}
 	const { timestamp, expires_in } = token;
 	const millisecondsElapsed = Date.now() - Number(timestamp);
-	const isExpired = millisecondsElapsed / 1000 > Number(expires_in);
-	return {
-		isExpired,
-		token
-	};
+	return millisecondsElapsed / 1000 > Number(expires_in);
 };
 
 export const logout = (
@@ -90,17 +80,14 @@ export const refreshToken = async (
 	res: NextApiResponse | ServerResponse
 ): Promise<boolean> => {
 	try {
-		const { isExpired, token } = hasTokenExpired(req, res);
-
-		if (isExpired === undefined || token === null) {
+		const isExpired = hasTokenExpired(req, res);
+		if (isExpired === undefined) {
 			console.error('Invalid token');
 			logout(req, res);
 			throw new Error('Invalid token');
 		}
 		const result = await axios.get('/api/refresh_token', {
-			headers: {
-				Cookie: String(req.headers.cookie)
-			}
+			withCredentials: true
 		});
 		if ('data' in result) {
 			const newToken = result.data as TokenDto;

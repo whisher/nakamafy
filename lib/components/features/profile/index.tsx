@@ -6,7 +6,6 @@ import { useSpotify } from '../../../hooks';
 import { Alert } from '@/ui/alert';
 import { Loader } from '@/ui/loader';
 import { Account } from './account';
-import { Layout } from './layout';
 
 export interface ProfileProps {
 	token: TokenDto;
@@ -23,24 +22,18 @@ const Profile: React.FC<ProfileProps> = ({ token }) => {
 	);
 
 	if (errorMe || errorFollowing || errorPlaylists) {
-		return (
-			<Layout>
-				<Alert />
-			</Layout>
-		);
+		return <Alert />;
 	}
 	return (
-		<Layout>
+		<>
 			{me && meFollowing && mePlaylists ? (
 				<main className="">
 					<Account me={me} meFollowing={meFollowing} mePlaylists={mePlaylists} />
 				</main>
 			) : (
-				<Layout>
-					<Loader />
-				</Layout>
+				<Loader />
 			)}
-		</Layout>
+		</>
 	);
 };
 
