@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import type { TokenDto } from '../../lib/util/spotify';
 
 import axios from 'axios';
-import { getHttpOnlyTokenCookie } from '../../lib/util/spotify';
+import { getHttpOnlyRefreshTokenCookie } from '../../lib/util/spotify';
 
 export type DataParamName = 'grant_type' | 'refresh_token';
 
@@ -12,12 +12,11 @@ const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
 
 const RefreshToken = async (req: NextApiRequest, res: NextApiResponse<TokenDto | unknown>) => {
 	try {
-		const token = getHttpOnlyTokenCookie(req, res);
+		const refresh_token = getHttpOnlyRefreshTokenCookie(req, res);
 
-		if (!token) {
-			throw new Error('Invalid api token');
+		if (!refresh_token) {
+			throw new Error('Invalid api refresh token');
 		}
-		const { refresh_token } = token;
 
 		const buffer = Buffer.from(`${String(CLIENT_ID)}:${String(CLIENT_SECRET)}`).toString('base64');
 		const params: Record<DataParamName, string> = {
@@ -38,9 +37,11 @@ const RefreshToken = async (req: NextApiRequest, res: NextApiResponse<TokenDto |
 		});
 		if ('data' in result) {
 			const token = result.data as TokenDto;
+			console.log('REFRESH TOKEN ', token);
 			return res.status(201).json(token);
 		}
 		throw new Error('Invalid Refresh Token');
+		return res.status(201).json([1, 2, 3]);
 	} catch (error) {
 		console.error('error', error);
 		res.status(500).json(error);

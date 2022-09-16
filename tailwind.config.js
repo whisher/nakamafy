@@ -17,7 +17,8 @@ module.exports = {
 					200: '#e4e4e7',
 					300: '#d4d4d8',
 					400: '#d4d4d8',
-					500: '#586477' // shadow bottom
+					500: '#586477', // shadow bottom
+					600: '#121212'
 				}
 			},
 			fontFamily: {

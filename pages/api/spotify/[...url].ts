@@ -29,15 +29,13 @@ const buildUrl = (
 const SpotifyApi = async (req: NextApiRequest, res: NextApiResponse<unknown>) => {
 	const { url, ...params } = req.query;
 
-	console.log();
-
 	try {
 		let token = getHttpOnlyTokenCookie(req, res);
 
 		if (!token || !url) {
 			throw new Error('Invalid me api token');
 		}
-		const { isExpired } = await hasTokenExpired(req, res);
+		const isExpired = await hasTokenExpired(req, res);
 		if (isExpired) {
 			console.log('OLD ME COOKIE', isExpired, token);
 			const result = await refreshToken(req, res);

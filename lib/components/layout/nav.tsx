@@ -9,7 +9,7 @@ export interface NavProps {
 	pathname: string;
 }
 
-const Nav: React.FC<NavProps> = ({ pathname }) => {
+const Nav = ({ pathname }: NavProps) => {
 	const { profile } = ROUTES;
 	return (
 		<div className="px-6 pt-6">

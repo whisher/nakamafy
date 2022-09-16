@@ -8,6 +8,7 @@ import { Home } from '@/features/home';
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
 	const { profile } = REDIRECT_ROUTES;
 	const isExpired = hasTokenExpired(req, res);
+	console.log('isExpired', isExpired);
 	if (isExpired === undefined) {
 		return {
 			props: {}

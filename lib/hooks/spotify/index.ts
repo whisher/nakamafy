@@ -1,6 +1,6 @@
-import type { TokenDto } from '../util/spotify';
+import type { TokenDto } from '../../util/spotify';
 
-import axios from '../util/axios';
+import axios from '../../util/axios';
 import useSWR from 'swr';
 
 const fetcher = (token: string) => (url: string) =>
@@ -11,10 +11,7 @@ const fetcher = (token: string) => (url: string) =>
 				Authorization: `Bearer ${token}`
 			}
 		})
-		.then((res) => res.data)
-		.catch((error) => {
-			console.error('ERROR', error);
-		});
+		.then((res) => res.data);
 
 export const useSpotify = <T>(url: string, token: TokenDto) => {
 	const { access_token } = token;

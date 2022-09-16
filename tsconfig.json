@@ -17,6 +17,7 @@
 		"baseUrl": ".",
 		"paths": {
 			"@/features/*": ["lib/components/features/*"],
+			"@/types/*": ["lib/types/*"],
 			"@/ui/*": ["lib/components/ui/*"]
 		}
 	},

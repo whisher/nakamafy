@@ -34,7 +34,7 @@ const SpotifyMe = async (req: NextApiRequest, res: NextApiResponse<void>) => {
 		});
 		if ('data' in result) {
 			const token = result.data as TokenDto;
-			setHttpOnlyTokenCookie(req, res, token);
+			setHttpOnlyTokenCookie(token, req, res);
 			res.redirect(307, '/');
 		} else {
 			res.status(500).send();

@@ -6,7 +6,7 @@ export interface LayoutProps {
 	children: ReactNode;
 }
 
-const Main: React.FC<LayoutProps> = ({ children }) => {
+const Main = ({ children }: LayoutProps) => {
 	const router = useRouter();
 	const isHome = router.pathname === '/';
 	if (isHome) {

@@ -2,37 +2,51 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { IncomingMessage, ServerResponse } from 'http';
 import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 
-import { COOKIE_SPOTIFY_TOKEN_KEY } from '../constant';
+import { COOKIE_SPOTIFY_TOKEN_KEY, COOKIE_SPOTIFY_REFRESH_TOKEN_KEY } from '../constant';
 import axios from './axios';
 
 export interface TokenDto {
 	access_token: string;
 	token_type: 'Bearer';
 	expires_in: number;
-	refresh_token: string;
+	refresh_token?: string;
 	scope: string;
 	timestamp?: number;
 }
 
+const COOKIE_SECURE = process.env.NODE_ENV === 'production' ? true : false;
+const COOKIE_MAX_AGE = 60 * 60 * 24 * 30;
 export type NextRequest = IncomingMessage & {
 	cookies?: { [key: string]: string } | Partial<{ [key: string]: string }>;
 };
 
-export const setHttpOnlyTokenCookie = (
+export const getHttpOnlyRefreshTokenCookie = (
 	req: NextApiRequest | NextRequest,
-	res: NextApiResponse | ServerResponse,
-	token: TokenDto
+	res: NextApiResponse | ServerResponse
+): string | false => {
+	const tokenJsonB64 = getCookie(COOKIE_SPOTIFY_REFRESH_TOKEN_KEY, {
+		req,
+		res
+	});
+	console.log('refresh before', tokenJsonB64);
+	if (!tokenJsonB64) {
+		return false;
+	}
+	console.log('refresh after', Buffer.from(String(tokenJsonB64), 'base64').toString('ascii'));
+	return Buffer.from(String(tokenJsonB64), 'base64').toString('ascii');
+};
+
+export const setHttpOnlyRefreshTokenCookie = (
+	token: string,
+	req: NextApiRequest | NextRequest,
+	res: NextApiResponse | ServerResponse
 ): void => {
-	const maxAge = 60 * 60 * 24; // One day
-	const secure = process.env.NODE_ENV === 'production' ? true : false;
-	token.timestamp = Date.now() - 1000 * 60; // refresh token one minute before expired
-	let tokenJsonStr = JSON.stringify(token);
-	let tokenJsonB64 = Buffer.from(tokenJsonStr).toString('base64');
-	setCookie(COOKIE_SPOTIFY_TOKEN_KEY, tokenJsonB64, {
+	const refreshTokenB64 = Buffer.from(token).toString('base64');
+	setCookie(COOKIE_SPOTIFY_REFRESH_TOKEN_KEY, refreshTokenB64, {
 		req,
 		res,
-		maxAge,
-		secure,
+		maxAge: COOKIE_MAX_AGE,
+		secure: COOKIE_SECURE,
 		httpOnly: true,
 		sameSite: 'none'
 	});
@@ -50,6 +64,30 @@ export const getHttpOnlyTokenCookie = (
 		return false;
 	}
 	return JSON.parse(Buffer.from(String(tokenJsonB64), 'base64').toString('ascii')) as TokenDto;
+};
+
+export const setHttpOnlyTokenCookie = (
+	token: TokenDto,
+	req: NextApiRequest | NextRequest,
+	res: NextApiResponse | ServerResponse
+): void => {
+	if ('refresh_token' in token) {
+		const { refresh_token } = token;
+		if (refresh_token !== undefined) {
+			setHttpOnlyRefreshTokenCookie(refresh_token, req, res);
+		}
+	}
+	token.timestamp = Date.now(); //  - 1000 * 60 refresh token one minute before expired
+	let tokenJsonStr = JSON.stringify(token);
+	let tokenJsonB64 = Buffer.from(tokenJsonStr).toString('base64');
+	setCookie(COOKIE_SPOTIFY_TOKEN_KEY, tokenJsonB64, {
+		req,
+		res,
+		maxAge: COOKIE_MAX_AGE,
+		secure: COOKIE_SECURE,
+		httpOnly: true,
+		sameSite: 'none'
+	});
 };
 
 export const hasTokenExpired = (
@@ -73,6 +111,10 @@ export const logout = (
 		req,
 		res
 	});
+	deleteCookie(COOKIE_SPOTIFY_REFRESH_TOKEN_KEY, {
+		req,
+		res
+	});
 };
 
 export const refreshToken = async (
@@ -87,11 +129,14 @@ export const refreshToken = async (
 			throw new Error('Invalid token');
 		}
 		const result = await axios.get('/api/refresh_token', {
-			withCredentials: true
+			headers: {
+				Cookie: String(req.headers.cookie)
+			}
 		});
 		if ('data' in result) {
 			const newToken = result.data as TokenDto;
-			setHttpOnlyTokenCookie(req, res, newToken);
+			console.log('REFRESH TOKEN ', newToken);
+			setHttpOnlyTokenCookie(newToken, req, res);
 			return true;
 		}
 		return false;
