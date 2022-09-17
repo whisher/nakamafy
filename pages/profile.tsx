@@ -9,6 +9,7 @@ import { Profile } from '@/features/profile';
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
 	const { home } = REDIRECT_ROUTES;
 	const isExpired = hasTokenExpired(req, res);
+	console.log('isExpired', isExpired);
 	if (isExpired === undefined) {
 		return {
 			redirect: {

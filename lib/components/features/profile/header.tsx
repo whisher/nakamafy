@@ -1,7 +1,7 @@
 import React from 'react';
 import type { MeDto, MeFollowingDto, MePlaylistDto } from '@/types/spotify';
 import Image from 'next/image';
-import { FaUser } from 'react-icons/fa';
+
 import { Account } from '@/ui/account';
 import { Spacer } from '@/ui/spacer';
 export interface AccountProps {

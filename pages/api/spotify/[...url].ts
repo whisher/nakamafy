@@ -28,7 +28,7 @@ const buildUrl = (
 };
 const SpotifyApi = async (req: NextApiRequest, res: NextApiResponse<unknown>) => {
 	const { url, ...params } = req.query;
-
+	console.log(url, Date.now());
 	try {
 		let token = getHttpOnlyTokenCookie(req, res);
 
