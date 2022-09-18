@@ -10,7 +10,8 @@ module.exports = {
 				black: '#171717',
 				brand: {
 					100: '#a3e635',
-					200: '#3f3f46'
+					200: '#3f3f46',
+					300: '#1ed75f' //green btn
 				},
 				gray: {
 					100: '#adc5ec', // shadow top loader
