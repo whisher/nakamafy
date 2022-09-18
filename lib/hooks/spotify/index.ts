@@ -24,12 +24,12 @@ const fetcher = (token: string) => (url: string) =>
 		})
 		.then((res) => res.data);
 
-export const useSpotify = <T>(
+export const useSpotify = <TReturnDataTdo>(
 	url: string | null,
 	token: TokenDto,
 	options: SWRConfiguration = {}
 ) => {
 	const { access_token } = token;
-	const { data, error } = useSWR<T>(url, fetcher(access_token), options);
+	const { data, error } = useSWR<TReturnDataTdo>(url, fetcher(access_token), options);
 	return { data, error };
 };

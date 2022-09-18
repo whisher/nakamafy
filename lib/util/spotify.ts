@@ -2,7 +2,11 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { IncomingMessage, ServerResponse } from 'http';
 import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 
-import { COOKIE_SPOTIFY_TOKEN_KEY, COOKIE_SPOTIFY_REFRESH_TOKEN_KEY } from '../constant';
+import {
+	COOKIE_SPOTIFY_STATE_KEY,
+	COOKIE_SPOTIFY_TOKEN_KEY,
+	COOKIE_SPOTIFY_REFRESH_TOKEN_KEY
+} from '../constant';
 import axios from './axios';
 
 export interface TokenDto {
@@ -107,6 +111,10 @@ export const logout = (
 	req: NextApiRequest | NextRequest,
 	res: NextApiResponse | ServerResponse
 ): void => {
+	deleteCookie(COOKIE_SPOTIFY_STATE_KEY, {
+		req,
+		res
+	});
 	deleteCookie(COOKIE_SPOTIFY_TOKEN_KEY, {
 		req,
 		res

@@ -10,7 +10,10 @@ export type DataParamName = 'grant_type' | 'refresh_token';
 const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
 const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
 
-const RefreshToken = async (req: NextApiRequest, res: NextApiResponse<TokenDto | unknown>) => {
+const SpotifyRefreshToken = async (
+	req: NextApiRequest,
+	res: NextApiResponse<TokenDto | unknown>
+) => {
 	try {
 		const refresh_token = getHttpOnlyRefreshTokenCookie(req, res);
 
@@ -41,11 +44,10 @@ const RefreshToken = async (req: NextApiRequest, res: NextApiResponse<TokenDto |
 			return res.status(201).json(token);
 		}
 		throw new Error('Invalid Refresh Token');
-		return res.status(201).json([1, 2, 3]);
 	} catch (error) {
 		console.error('error', error);
 		res.status(500).json(error);
 	}
 };
 
-export default RefreshToken;
+export default SpotifyRefreshToken;
