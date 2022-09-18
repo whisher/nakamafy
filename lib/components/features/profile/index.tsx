@@ -1,12 +1,19 @@
 import React from 'react';
 import type { TokenDto } from '../../../util/spotify';
-import type { MeDto, MeFollowingDto, MePlaylistDto, MeTopTracksDto } from '@/types/spotify';
+import type {
+	MeDto,
+	MeFollowingDto,
+	MePlaylistDto,
+	MeTopArtistsDto,
+	MeTopTracksDto
+} from '@/types/spotify';
 import { useSpotify } from '../../../hooks/spotify';
 
 import { Alert } from '@/ui/alert';
 import { Loader } from '@/ui/loader';
 import { ProfileHeader } from './header';
 import { ProfilePlaylists } from './playlists';
+import { ProfileTopArtists } from './top-artists';
 import { ProfileTopTracks } from './top-tracks';
 export interface ProfileProps {
 	token: TokenDto;
@@ -17,26 +24,31 @@ const Profile: React.FC<ProfileProps> = ({ token }) => {
 		'me/following?type=artist',
 		token
 	);
-	const { data: mePlaylists, error: errorPlaylists } = useSpotify<MePlaylistDto>(
-		'me/playlists',
+	const { data: meTopArtists, error: errorTopArtists } = useSpotify<MeTopArtistsDto>(
+		'me/top/artists?time_range=short_term',
 		token
 	);
 	const { data: meTopTracks, error: errorTopTracks } = useSpotify<MeTopTracksDto>(
 		'me/top/tracks?time_range=short_term',
 		token
 	);
-	console.log(meTopTracks);
-	if (errorMe || errorFollowing || errorPlaylists || errorTopTracks) {
+	const { data: mePlaylists, error: errorPlaylists } = useSpotify<MePlaylistDto>(
+		'me/playlists',
+		token
+	);
+
+	if (errorMe || errorFollowing || errorTopArtists || errorTopTracks || errorPlaylists) {
 		return <Alert />;
 	}
 	return (
 		<>
-			{me && meFollowing && mePlaylists && meTopTracks ? (
+			{me && meFollowing && meTopArtists && meTopTracks && mePlaylists ? (
 				<main className="">
 					<ProfileHeader me={me} meFollowing={meFollowing} mePlaylists={mePlaylists} />
 					<div className="min-h-screen flex flex-col bg-gray-600">
-						<ProfilePlaylists data={mePlaylists} />
+						<ProfileTopArtists data={meTopArtists} />
 						<ProfileTopTracks data={meTopTracks} />
+						<ProfilePlaylists data={mePlaylists} />
 					</div>
 				</main>
 			) : (

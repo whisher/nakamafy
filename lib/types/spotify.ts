@@ -44,6 +44,29 @@ export interface MeTopTracksDto {
 	next: string;
 }
 
+export interface MeTopArtistsDto {
+	items: MeTopArtistsItemsDto[];
+	total: number;
+	limit: number;
+	offset: number;
+	href: string;
+	previous: any;
+	next: string;
+}
+
+export interface MeTopArtistsItemsDto {
+	external_urls: ExternalUrlsDto;
+	followers: FollowersDto;
+	genres: string[];
+	href: string;
+	id: string;
+	images: ImageDto[];
+	name: string;
+	popularity: number;
+	type: string;
+	uri: string;
+}
+
 export interface MeTopTracksItemsDto {
 	album: AlbumDto;
 	artists: ArtistDto[];
