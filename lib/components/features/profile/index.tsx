@@ -11,6 +11,7 @@ import { useSpotify } from '../../../hooks/spotify';
 
 import { Alert } from '@/ui/alert';
 import { Loader } from '@/ui/loader';
+import { ProfileFollowing } from './following';
 import { ProfileHeader } from './header';
 import { ProfilePlaylists } from './playlists';
 import { ProfileTopArtists } from './top-artists';
@@ -36,7 +37,7 @@ const Profile: React.FC<ProfileProps> = ({ token }) => {
 		'me/playlists',
 		token
 	);
-
+	console.log(meFollowing);
 	if (errorMe || errorFollowing || errorTopArtists || errorTopTracks || errorPlaylists) {
 		return <Alert />;
 	}
@@ -49,6 +50,7 @@ const Profile: React.FC<ProfileProps> = ({ token }) => {
 						<ProfileTopArtists data={meTopArtists} />
 						<ProfileTopTracks data={meTopTracks} />
 						<ProfilePlaylists data={mePlaylists} />
+						<ProfileFollowing data={meFollowing} />
 					</div>
 				</main>
 			) : (

@@ -10,6 +10,7 @@ export interface ProfilePlaylistsProps {
 }
 
 const ProfilePlaylists: React.FC<ProfilePlaylistsProps> = ({ data }) => {
+	const { items } = data;
 	return (
 		<section>
 			<article>
@@ -17,7 +18,7 @@ const ProfilePlaylists: React.FC<ProfilePlaylistsProps> = ({ data }) => {
 					<h1 className="text-2xl font-bold tracking-tight mix-blend-lighten drop-shadow-2xl text-white">
 						Public Playlists
 					</h1>
-					{data.items && data.items.length ? (
+					{items.length > 0 ? (
 						<div className="grid grid-cols-6 gap-10 mt-10">
 							{data.items.map(({ id, images, name }) => (
 								<Link href={`/`} key={id}>

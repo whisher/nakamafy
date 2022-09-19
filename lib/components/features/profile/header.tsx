@@ -1,7 +1,7 @@
 import React from 'react';
 import type { MeDto, MeFollowingDto, MePlaylistDto } from '@/types/spotify';
 import Image from 'next/image';
-
+import { FiEdit2 } from 'react-icons/fi';
 import { Account } from '@/ui/account';
 import { Spacer } from '@/ui/spacer';
 export interface AccountProps {
@@ -20,18 +20,24 @@ const ProfileHeader: React.FC<AccountProps> = ({ me, meFollowing, mePlaylists })
 
 	return (
 		<div className="h-80 bg-gradient-to-b from-gray-100 to-gray-500">
+			<div className="fixed top-0 left-0 right-0 z-50 h-14 flex justify-end items-center ml-56 px-6 bg-transparent">
+				<Account data={me} />
+			</div>
 			<Spacer>
-				<div className="flex justify-end">
-					<Account data={me} />
-				</div>
 				<div className="flex items-center h-56 mt-10">
-					<Image
-						src={images[0].url}
-						alt={display_name}
-						width={230}
-						height={230}
-						className="rounded-full"
-					/>
+					<div className="group relative flex justify-center items-center">
+						<Image
+							src={images[0].url}
+							alt={display_name}
+							width={230}
+							height={230}
+							className="rounded-full"
+						/>
+						<div className="absolute inset-0 flex flex-col justify-center items-center rounded-full bg-black/50 transition opacity-0 group-hover:opacity-100">
+							<FiEdit2 className="h-12 w-12 text-white" />
+							<span className="block mt-1 text-white">Choose photo</span>
+						</div>
+					</div>
 					<div className="flex h-full flex-col justify-between ml-6 py-3 text-white">
 						<span className="text-xs mb-auto uppercase font-bold">profile</span>
 						<p className="text-7xl font-bold tracking-tighter">{display_name}</p>
