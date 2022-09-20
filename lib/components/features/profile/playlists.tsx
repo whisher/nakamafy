@@ -15,11 +15,11 @@ const ProfilePlaylists: React.FC<ProfilePlaylistsProps> = ({ data }) => {
 		<section>
 			<article>
 				<Spacer>
-					<h1 className="text-2xl font-bold tracking-tight mix-blend-lighten drop-shadow-2xl text-white">
+					<h1 className="mt-3 text-xl font-bold tracking-tight mix-blend-lighten drop-shadow-2xl text-white">
 						Public Playlists
 					</h1>
 					{items.length > 0 ? (
-						<div className="grid grid-cols-6 gap-10 mt-10">
+						<div className="grid grid-cols-6 gap-10 mt-6">
 							{data.items.map(({ id, images, name }) => (
 								<Link href={`/`} key={id}>
 									<a className="flex flex-col items-center">

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import type { MeTopTracksDto } from '@/types/spotify';
 import Image from 'next/image';
 
@@ -9,21 +9,37 @@ import { Spacer } from '@/ui/spacer';
 
 export interface ProfileTopTracksProps {
 	data: MeTopTracksDto;
+	apiTracksQueryParams: string;
+	setApiTracksQueryParams: (query: string) => void;
 }
 
-const ProfileTopTracks: React.FC<ProfileTopTracksProps> = ({ data }) => {
+const ProfileTopTracks: React.FC<ProfileTopTracksProps> = ({
+	data,
+	apiTracksQueryParams,
+	setApiTracksQueryParams
+}) => {
 	const { items } = data;
-	const [current, setCurrent] = useState<string | undefined>(undefined);
-	const handlerSetCurrent = (value: string) => {
-		setCurrent(value);
+	const handlerSetApiTracksQueryParams = () => {
+		const current =
+			apiTracksQueryParams.length === 0 ? '?time_range=short_term&limit=10&offset=0' : '';
+		setApiTracksQueryParams(current);
 	};
 	return (
 		<section>
 			<article>
 				<Spacer>
-					<h1 className="text-2xl font-bold tracking-tight mix-blend-lighten drop-shadow-2xl text-white">
-						Top Tracks
-					</h1>
+					<div className="flex justify-between items-center">
+						<h1 className="mt-3 text-xl font-bold tracking-tight mix-blend-lighten drop-shadow-2xl text-white">
+							Top Tracks
+						</h1>
+						<button
+							type="button"
+							className="bg-transparent uppercase text-sm font-medium text-white/50 hover:underline hover:underline-offset-4"
+							onClick={handlerSetApiTracksQueryParams}
+						>
+							See all
+						</button>
+					</div>
 					<>
 						{items.length > 0 ? (
 							<ul className="flex flex-col gap-3 mt-6">
@@ -32,8 +48,7 @@ const ProfileTopTracks: React.FC<ProfileTopTracksProps> = ({ data }) => {
 										<div className="w-7/12 flex items-center">
 											<button
 												type="button"
-												className="group h-12 w-12 bg-red-100 flex justify-center items-center bg-transparent"
-												onClick={() => handlerSetCurrent(id)}
+												className="group h-12 w-12 flex justify-center items-center bg-transparent"
 											>
 												<span className="text-lg text-white/50 block group-hover:hidden">
 													{i + 1}

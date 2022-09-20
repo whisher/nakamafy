@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import type { TokenDto } from '../../../util/spotify';
 import type {
 	MeDto,
@@ -20,6 +20,10 @@ export interface ProfileProps {
 	token: TokenDto;
 }
 const Profile: React.FC<ProfileProps> = ({ token }) => {
+	const [apiTracksQueryParams, setApiTracksQueryParams] = useState<string>(
+		'?time_range=short_term&limit=10&offset=0'
+	);
+	console.log(apiTracksQueryParams);
 	const { data: me, error: errorMe } = useSpotify<MeDto>('me', token);
 	const { data: meFollowing, error: errorFollowing } = useSpotify<MeFollowingDto>(
 		'me/following?type=artist',
@@ -30,14 +34,14 @@ const Profile: React.FC<ProfileProps> = ({ token }) => {
 		token
 	);
 	const { data: meTopTracks, error: errorTopTracks } = useSpotify<MeTopTracksDto>(
-		'me/top/tracks?time_range=short_term',
+		`me/top/tracks${apiTracksQueryParams}`,
 		token
 	);
 	const { data: mePlaylists, error: errorPlaylists } = useSpotify<MePlaylistDto>(
 		'me/playlists',
 		token
 	);
-	console.log(meFollowing);
+
 	if (errorMe || errorFollowing || errorTopArtists || errorTopTracks || errorPlaylists) {
 		return <Alert />;
 	}
@@ -48,7 +52,11 @@ const Profile: React.FC<ProfileProps> = ({ token }) => {
 					<ProfileHeader me={me} meFollowing={meFollowing} mePlaylists={mePlaylists} />
 					<div className="min-h-screen flex flex-col bg-gray-600">
 						<ProfileTopArtists data={meTopArtists} />
-						<ProfileTopTracks data={meTopTracks} />
+						<ProfileTopTracks
+							data={meTopTracks}
+							apiTracksQueryParams={apiTracksQueryParams}
+							setApiTracksQueryParams={setApiTracksQueryParams}
+						/>
 						<ProfilePlaylists data={mePlaylists} />
 						<ProfileFollowing data={meFollowing} />
 					</div>

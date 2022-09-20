@@ -16,7 +16,7 @@ const ProfileFollowing: React.FC<ProfileFollowingProps> = ({ data }) => {
 		<section>
 			<article>
 				<Spacer>
-					<h1 className="text-2xl font-bold tracking-tight mix-blend-lighten drop-shadow-2xl text-white">
+					<h1 className="mt-3 text-xl font-bold tracking-tight mix-blend-lighten drop-shadow-2xl text-white">
 						Following
 					</h1>
 					<>

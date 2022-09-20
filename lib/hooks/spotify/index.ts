@@ -25,7 +25,7 @@ const fetcher = (token: string) => (url: string) =>
 		.then((res) => res.data);
 
 export const useSpotify = <TReturnDataTdo>(
-	url: string | null,
+	url: string | string[] | null,
 	token: TokenDto,
 	options: SWRConfiguration = {}
 ) => {

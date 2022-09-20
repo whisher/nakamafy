@@ -1,6 +1,8 @@
 import React from 'react';
 import type { MeDto, MeFollowingDto, MePlaylistDto } from '@/types/spotify';
 import Image from 'next/image';
+import { useInView } from 'react-intersection-observer';
+
 import { FiEdit2 } from 'react-icons/fi';
 import { Account } from '@/ui/account';
 import { Spacer } from '@/ui/spacer';
@@ -17,14 +19,28 @@ const ProfileHeader: React.FC<AccountProps> = ({ me, meFollowing, mePlaylists })
 	} = meFollowing;
 	const { total: numOfPublicPlaylists } = mePlaylists;
 	const numOfFollowing = items.length;
+	const { ref, inView } = useInView({
+		threshold: 0
+	});
 
 	return (
 		<div className="h-80 bg-gradient-to-b from-gray-100 to-gray-500">
-			<div className="fixed top-0 left-0 right-0 z-50 h-14 flex justify-end items-center ml-56 px-6 bg-transparent">
+			<div
+				className={`fixed top-0 left-0 right-0 z-50 h-14 flex justify-between items-center ml-56 px-6 transition ${
+					!inView ? 'bg-gray-500' : 'bg-transparent'
+				}`}
+			>
+				<p
+					className={`text-xl font-bold text-white transition  ${
+						!inView ? 'opacity-100' : 'opacity-0'
+					}`}
+				>
+					{display_name}
+				</p>
 				<Account data={me} />
 			</div>
 			<Spacer>
-				<div className="flex items-center h-56 mt-10">
+				<div ref={ref} className="flex items-center h-56 mt-10">
 					<div className="group relative flex justify-center items-center">
 						<Image
 							src={images[0].url}

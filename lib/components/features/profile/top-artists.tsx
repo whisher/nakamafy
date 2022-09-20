@@ -16,8 +16,8 @@ const ProfileTopArtists: React.FC<ProfileTopArtistsProps> = ({ data }) => {
 			<article>
 				<Spacer>
 					<IoIosMore className="h-12 w-12 -ml-3 py-3 text-white/50" />
-					<h1 className="text-2xl font-bold tracking-tight mix-blend-lighten drop-shadow-2xl text-white">
-						Top Artists this month
+					<h1 className="text-xl font-bold tracking-tight mix-blend-lighten drop-shadow-2xl text-white">
+						Top artists this month
 					</h1>
 					<>
 						{items.length > 0 ? (
