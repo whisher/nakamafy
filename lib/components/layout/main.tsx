@@ -14,10 +14,10 @@ const Main = ({ children }: LayoutProps) => {
 	}
 	return (
 		<div className="flex">
-			<div className="w-56 fixed top-0 min-h-screen bg-black">
+			<div className="w-56 fixed top-0 min-h-screen bg-[#000000]">
 				<Nav pathname={router.pathname} />
 			</div>
-			<div className="min-h-screen ml-56 flex-1 bg-brand-200">{children}</div>
+			<main className="min-h-screen ml-56 flex-1">{children}</main>
 		</div>
 	);
 };

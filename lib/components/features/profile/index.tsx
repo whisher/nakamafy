@@ -48,9 +48,9 @@ const Profile: React.FC<ProfileProps> = ({ token }) => {
 	return (
 		<>
 			{me && meFollowing && meTopArtists && meTopTracks && mePlaylists ? (
-				<main className="">
+				<>
 					<ProfileHeader me={me} meFollowing={meFollowing} mePlaylists={mePlaylists} />
-					<div className="min-h-screen flex flex-col bg-gray-600">
+					<div className="flex flex-col bg-gray-600">
 						<ProfileTopArtists data={meTopArtists} />
 						<ProfileTopTracks
 							data={meTopTracks}
@@ -60,7 +60,7 @@ const Profile: React.FC<ProfileProps> = ({ token }) => {
 						<ProfilePlaylists data={mePlaylists} />
 						<ProfileFollowing data={meFollowing} />
 					</div>
-				</main>
+				</>
 			) : (
 				<Loader />
 			)}
