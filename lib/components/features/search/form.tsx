@@ -1,27 +1,18 @@
-import React, { useState } from 'react';
-import type { NextRouter } from 'next/router';
-import { useRouter } from 'next/router';
-
+import React from 'react';
 import { FiSearch } from 'react-icons/fi';
+import { useSearch, SearchTypeAction } from '../../../hooks/search';
 
-const getFormInitialValue = (router: NextRouter): string => {
-	const asPath = router.asPath;
-	const asPathArr = asPath.split('/');
-	return asPath.length > 2 ? asPathArr[2] : '';
-};
 const SearchForm: React.FC = () => {
-	const router = useRouter();
-	const formInitialValue = getFormInitialValue(router);
-	const [search, setSearch] = useState<string>(formInitialValue.length > 0 ? formInitialValue : '');
+	const { state, dispatch } = useSearch();
 
-	console.log('router', formInitialValue);
 	const handleSearch = (ev: React.FormEvent<HTMLInputElement>) => {
-		setSearch((ev.target as HTMLInputElement).value);
-		router.push(`/search/${search}`);
+		const query = (ev.target as HTMLInputElement).value;
+		dispatch({ type: SearchTypeAction.Query, payload: query });
 	};
 
 	const handleSubmit = (ev: React.SyntheticEvent) => {
 		ev.preventDefault();
+		dispatch({ type: SearchTypeAction.Query, payload: state.path.query });
 	};
 
 	return (
@@ -41,8 +32,8 @@ const SearchForm: React.FC = () => {
 				className="flex-1 outline-0 border-0  pl-3 rounded-r-full text-sm placeholder:text-sm placeholder:text-gray-600 caret-gray-600"
 				placeholder="What do you want listen to?"
 				type="search"
-				value={search}
-				onChange={handleSearch}
+				value={state.path.query}
+				onInput={handleSearch}
 			/>
 		</form>
 	);

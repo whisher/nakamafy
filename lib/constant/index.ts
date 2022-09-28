@@ -16,4 +16,5 @@ export const REDIRECT_ROUTES = {
 	profile: '/profile'
 };
 
-// playlist-read-private
+export const FALLBACK_IMAGE_SIZE = { height: 170, width: 160 };
+export const IMAGE_QUALITY = 90;

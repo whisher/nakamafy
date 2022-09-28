@@ -27,7 +27,7 @@ const ProfileTopArtists: React.FC<ProfileTopArtistsProps> = ({ data }) => {
 										<div className="flex flex-col">
 											{images[0] && (
 												<div className="group h-[273px] flex flex-col px-3 pb-3 rounded-lg cursor-pointer transition-colors duration-300 bg-[#070904] hover:bg-[#262626]">
-													<div className="relative flex-1 flex justify-center items-center">
+													<div className="relative overflow-hidden flex-1 flex justify-center items-center">
 														<Image
 															src={images[0].url}
 															alt={name}
@@ -37,7 +37,7 @@ const ProfileTopArtists: React.FC<ProfileTopArtistsProps> = ({ data }) => {
 														/>
 														<button
 															type="button"
-															className="absolute right-3 bottom-0 rounded-full bg-brand-300 transition duration-300 opacity-0 group-hover:bottom-5 group-hover:opacity-100"
+															className="absolute right-3 -bottom-12 scale-0 rounded-full bg-brand-300 transition-all ease-in-out  group-hover:bottom-5 group-hover:scale-100"
 														>
 															<IoMdArrowDropdown className="h-10 w-10 text-white transition -rotate-90" />
 														</button>

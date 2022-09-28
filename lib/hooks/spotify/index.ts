@@ -30,6 +30,6 @@ export const useSpotify = <TReturnDataTdo>(
 	options: SWRConfiguration = {}
 ) => {
 	const { access_token } = token;
-	const { data, error } = useSWR<TReturnDataTdo>(url, fetcher(access_token), options);
+	const { data, error } = useSWR<TReturnDataTdo, Error>(url, fetcher(access_token), options);
 	return { data, error };
 };
