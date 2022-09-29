@@ -23,8 +23,7 @@ const Search: React.FC<ProfileProps> = ({ token }) => {
 	const path = getPath();
 	const { data: me, error: errorMe } = useSpotify<MeDto>('me', token);
 	const { data: searchData, error: errorSearch } = useSpotify<SearchDto>(`search${path}`, token);
-	const { data, error } = useSpotify<SearchDto>(`audio-features/14XWXWv5FoCbFzLksawpEe`, token);
-	console.log('TRACKS', data);
+	console.log('PATH', path);
 	if (errorMe) {
 		return <Alert />;
 	}

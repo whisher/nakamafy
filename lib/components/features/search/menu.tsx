@@ -4,11 +4,10 @@ import { useSearch, SearchTypeAction, MenuTypesDto } from '../../../hooks/search
 export type OptionLabelsDto = { [Key in MenuTypesDto]: string };
 export const options: OptionLabelsDto = {
 	artist: 'Artists',
-	playlist: 'Playlists',
 	track: 'Songs',
+	playlist: 'Playlists',
 	album: 'Albums',
-	show: 'Podcast & Shows',
-	episode: 'Genres & Moods'
+	show_episode: 'Podcast & Shows'
 };
 
 const SearchMenu: React.FC = () => {

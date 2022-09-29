@@ -12,7 +12,7 @@ export enum SearchTypeAction {
 	Type = 'type'
 }
 
-export type MenuTypesDto = 'album' | 'artist' | 'playlist' | 'show' | 'track' | 'episode';
+export type MenuTypesDto = 'album' | 'artist' | 'playlist' | 'show_episode' | 'track';
 
 type SearchStateDto = {
 	path: { query: string; type: MenuTypesDto | undefined };
@@ -64,7 +64,8 @@ const SearchProvider = ({ children }: SearchProviderProps) => {
 		if (!query && !type) {
 			return `?q=''&type=playlist`;
 		} else if (query && type) {
-			return `?q=${query}&type=${type}`;
+			const currentType = type.includes('_') ? type.split('_').join(',') : type;
+			return `?q=${query}&type=${currentType}`;
 		} else {
 			return `?q=${query}&type=playlist`;
 		}

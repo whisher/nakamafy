@@ -7,9 +7,8 @@ import { Alert } from '@/ui/alert';
 import { Loader } from '@/ui/loader';
 import { SearchSwitcherAlbum } from './album';
 import { SearchSwitcherArtist } from './artist';
-import { SearchSwitcherEpisode } from './episode';
 import { SearchSwitcherPlaylist } from './playlist';
-import { SearchSwitcherShow } from './show';
+import { SearchSwitcherShow } from './show-episode';
 import { SearchSwitcherTrack } from './track';
 
 export interface SearchSwitcherProps {
@@ -20,10 +19,18 @@ export interface SearchSwitcherProps {
 
 const SearchSwitcher: React.FC<SearchSwitcherProps> = ({ data, error, type }) => {
 	if (error) {
-		return <Alert />;
+		return (
+			<div className="mt-10">
+				<Alert />
+			</div>
+		);
 	}
 	if (!data) {
-		return <Loader />;
+		return (
+			<div className="mt-10">
+				<Loader />
+			</div>
+		);
 	}
 	switch (type) {
 		case 'album':
@@ -35,15 +42,13 @@ const SearchSwitcher: React.FC<SearchSwitcherProps> = ({ data, error, type }) =>
 		case 'playlist':
 			const playlists = 'playlists' in data ? data.playlists.items : undefined;
 			return <SearchSwitcherPlaylist data={playlists} />;
-		case 'show':
+		case 'show_episode':
 			const shows = 'shows' in data ? data.shows.items : undefined;
-			return <SearchSwitcherShow data={shows} />;
+			const episodes = 'episodes' in data ? data.episodes.items : undefined;
+			return <SearchSwitcherShow shows={shows} episodes={episodes} />;
 		case 'track':
 			const tracks = 'tracks' in data ? data.tracks.items : undefined;
 			return <SearchSwitcherTrack data={tracks} />;
-		case 'episode':
-			const episodes = 'episodes' in data ? data.episodes.items : undefined;
-			return <SearchSwitcherEpisode data={episodes} />;
 		default:
 			const playlists2 = 'playlists' in data ? data.playlists.items : undefined;
 			return <SearchSwitcherPlaylist data={playlists2} />;

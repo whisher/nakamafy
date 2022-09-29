@@ -16,7 +16,7 @@ const SearchSwitcherArtistCard: React.FC<SearchSwitcherPlaylistProps> = ({ data 
 	return (
 		<Link href={`/search`}>
 			<a className="group flex flex-col p-3 gap-3 rounded transition bg-[#181818] hover:bg-[#272727]">
-				{avalaibleImage && (
+				{(avalaibleImage?.url || null) && (
 					<div className="relative overflow-hidden flex justify-center items-center">
 						<Image image={avalaibleImage} alt={name} className="rounded-full" />
 						<button
