@@ -11,7 +11,6 @@ export interface SearchSwitcherShowProps {
 }
 
 const SearchSwitcherShow: React.FC<SearchSwitcherShowProps> = ({ shows, episodes }) => {
-	console.log('shows', episodes);
 	return (
 		<Spacer>
 			<section>

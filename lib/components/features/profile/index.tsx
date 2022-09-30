@@ -23,7 +23,6 @@ const Profile: React.FC<ProfileProps> = ({ token }) => {
 	const [apiTracksQueryParams, setApiTracksQueryParams] = useState<string>(
 		'?time_range=short_term&limit=10&offset=0'
 	);
-	console.log(apiTracksQueryParams);
 	const { data: me, error: errorMe } = useSpotify<MeDto>('me', token);
 	const { data: meFollowing, error: errorFollowing } = useSpotify<MeFollowingDto>(
 		'me/following?type=artist',

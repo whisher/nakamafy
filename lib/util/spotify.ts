@@ -32,11 +32,11 @@ export const getHttpOnlyRefreshTokenCookie = (
 		req,
 		res
 	});
-	console.log('refresh before', tokenJsonB64);
+
 	if (!tokenJsonB64) {
 		return false;
 	}
-	console.log('refresh after', Buffer.from(String(tokenJsonB64), 'base64').toString('ascii'));
+
 	return Buffer.from(String(tokenJsonB64), 'base64').toString('ascii');
 };
 
@@ -143,7 +143,6 @@ export const refreshToken = async (
 		});
 		if ('data' in result) {
 			const newToken = result.data as TokenDto;
-			console.log('REFRESH TOKEN ', newToken);
 			setHttpOnlyTokenCookie(newToken, req, res);
 			return true;
 		}
