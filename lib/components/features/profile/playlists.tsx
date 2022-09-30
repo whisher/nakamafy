@@ -38,7 +38,7 @@ const ProfilePlaylists: React.FC<ProfilePlaylistsProps> = ({ data }) => {
 							))}
 						</div>
 					) : (
-						<p className="empty-notice">No playlists available</p>
+						<p className="text-white/90">No playlists available</p>
 					)}
 				</Spacer>
 			</article>

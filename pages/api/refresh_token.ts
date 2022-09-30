@@ -40,7 +40,6 @@ const SpotifyRefreshToken = async (
 		});
 		if ('data' in result) {
 			const token = result.data as TokenDto;
-			console.log('REFRESH TOKEN ', token);
 			return res.status(201).json(token);
 		}
 		throw new Error('Invalid Refresh Token');

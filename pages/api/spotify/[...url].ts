@@ -28,7 +28,6 @@ const buildUrl = (
 };
 const SpotifyApi = async (req: NextApiRequest, res: NextApiResponse<unknown>) => {
 	const { url, ...params } = req.query;
-	console.log(url, Date.now());
 	try {
 		let token = getHttpOnlyTokenCookie(req, res);
 
@@ -37,13 +36,11 @@ const SpotifyApi = async (req: NextApiRequest, res: NextApiResponse<unknown>) =>
 		}
 		const isExpired = await hasTokenExpired(req, res);
 		if (isExpired) {
-			console.log('OLD ME COOKIE', isExpired, token);
 			const result = await refreshToken(req, res);
 			if (!result) {
 				throw new Error('Invalid me refresh token');
 			}
 			token = getHttpOnlyTokenCookie(req, res);
-			console.log('NEW ME COOKIE', token);
 			if (!token) {
 				throw new Error('Invalid api me token');
 			}

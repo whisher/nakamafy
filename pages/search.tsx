@@ -4,7 +4,8 @@ import type { TokenDto } from '../lib/util/spotify';
 
 import { REDIRECT_ROUTES } from '../lib/constant';
 import { hasTokenExpired, getHttpOnlyTokenCookie, refreshToken } from '../lib/util/spotify';
-import { Profile } from '@/features/profile';
+import { SearchProvider } from '../lib/hooks/search';
+import { Search } from '@/features/search';
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
 	const { home } = REDIRECT_ROUTES;
@@ -71,7 +72,11 @@ export type SearchPageProps = {
 };
 const SearchPage: NextPage<SearchPageProps> = (data) => {
 	const { token } = data;
-	return <Profile token={token} />;
+	return (
+		<SearchProvider>
+			<Search token={token} />
+		</SearchProvider>
+	);
 };
 
 export default SearchPage;

@@ -42,9 +42,11 @@ const Account: React.FC<AccountProps> = ({ data }) => {
 								</Link>
 							</Menu.Item>
 							<Menu.Item>
-								<a href="/api/logout" className="block py-2 border-t border-white/10 mx-0.5">
-									<span className="text-xs text-white/90 pl-3"> Log out</span>
-								</a>
+								<Link href="/api/logout">
+									<a className="block py-2 border-t border-white/10 mx-0.5">
+										<span className="text-xs text-white/90 pl-3"> Log out</span>
+									</a>
+								</Link>
 							</Menu.Item>
 						</Menu.Items>
 					</Transition>

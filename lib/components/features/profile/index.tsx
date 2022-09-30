@@ -23,7 +23,6 @@ const Profile: React.FC<ProfileProps> = ({ token }) => {
 	const [apiTracksQueryParams, setApiTracksQueryParams] = useState<string>(
 		'?time_range=short_term&limit=10&offset=0'
 	);
-	console.log(apiTracksQueryParams);
 	const { data: me, error: errorMe } = useSpotify<MeDto>('me', token);
 	const { data: meFollowing, error: errorFollowing } = useSpotify<MeFollowingDto>(
 		'me/following?type=artist',
@@ -48,9 +47,9 @@ const Profile: React.FC<ProfileProps> = ({ token }) => {
 	return (
 		<>
 			{me && meFollowing && meTopArtists && meTopTracks && mePlaylists ? (
-				<main className="">
+				<>
 					<ProfileHeader me={me} meFollowing={meFollowing} mePlaylists={mePlaylists} />
-					<div className="min-h-screen flex flex-col bg-gray-600">
+					<div className="flex flex-col bg-gray-600">
 						<ProfileTopArtists data={meTopArtists} />
 						<ProfileTopTracks
 							data={meTopTracks}
@@ -60,7 +59,7 @@ const Profile: React.FC<ProfileProps> = ({ token }) => {
 						<ProfilePlaylists data={mePlaylists} />
 						<ProfileFollowing data={meFollowing} />
 					</div>
-				</main>
+				</>
 			) : (
 				<Loader />
 			)}

@@ -6,13 +6,13 @@ import { useInView } from 'react-intersection-observer';
 import { FiEdit2 } from 'react-icons/fi';
 import { Account } from '@/ui/account';
 import { Spacer } from '@/ui/spacer';
-export interface AccountProps {
+export interface ProfileHeaderProps {
 	me: MeDto;
 	meFollowing: MeFollowingDto;
 	mePlaylists: MePlaylistDto;
 }
 
-const ProfileHeader: React.FC<AccountProps> = ({ me, meFollowing, mePlaylists }) => {
+const ProfileHeader: React.FC<ProfileHeaderProps> = ({ me, meFollowing, mePlaylists }) => {
 	const { images, display_name } = me;
 	const {
 		artists: { items }
@@ -40,7 +40,7 @@ const ProfileHeader: React.FC<AccountProps> = ({ me, meFollowing, mePlaylists })
 				<Account data={me} />
 			</div>
 			<Spacer>
-				<div ref={ref} className="flex items-center h-56 mt-10">
+				<div ref={ref} className="flex items-center h-56 mt-14">
 					<div className="group relative flex justify-center items-center">
 						<Image
 							src={images[0].url}
