@@ -20,14 +20,14 @@ export interface SearchSwitcherProps {
 const SearchSwitcher: React.FC<SearchSwitcherProps> = ({ data, error, type }) => {
 	if (error) {
 		return (
-			<div className="mt-10">
+			<div className="mt-12">
 				<Alert />
 			</div>
 		);
 	}
 	if (!data) {
 		return (
-			<div className="mt-10">
+			<div className="mt-12">
 				<Loader />
 			</div>
 		);

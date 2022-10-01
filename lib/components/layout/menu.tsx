@@ -17,7 +17,7 @@ const Menu: React.FC<MenuProps> = ({ pathname }) => {
 		if (pathname === path) {
 			return `${common} text-white`;
 		}
-		return `${common} text-white/50`;
+		return `${common} text-white/50 hover:text-white`;
 	};
 	return (
 		<ul className="mt-6 pb-4 border-b rounded-sm border-white/10 ">
@@ -47,17 +47,21 @@ const Menu: React.FC<MenuProps> = ({ pathname }) => {
 			</li>
 			<li className="mt-10">
 				<Link href="/">
-					<a className="flex items-center">
-						<BsPlus className="h-6 w-6 rounded-sm fill-black bg-gray-100" />
-						<span className="flex-1 pl-3 text-sm font-bold text-white">Create Playlist</span>
+					<a className="group flex items-center ">
+						<BsPlus className="h-6 w-6 rounded-sm fill-black transition bg-white/50 group-hover:bg-white" />
+						<span className="flex-1 pl-3 text-sm font-bold transition text-white/50 group-hover:text-white">
+							Create Playlist
+						</span>
 					</a>
 				</Link>
 			</li>
 			<li className="mt-3">
 				<Link href="/">
-					<a className="flex items-center">
-						<TiHeart className="h-6 w-6 rounded-sm  text-gray-100 bg-gradient-to-br from-violet-700 to-gray-100" />
-						<span className="flex-1 pl-3 text-sm font-bold text-white">Liked Songs</span>
+					<a className="group flex items-center">
+						<TiHeart className="h-6 w-6 rounded-sm  text-gray-100 transition bg-gradient-to-br from-violet-700/80 to-gray-100/80 group-hover:from-violet-700 group-hover:to-gray-100" />
+						<span className="flex-1 pl-3 text-sm font-bold transition text-white/50 group-hover:text-white">
+							Liked Songs
+						</span>
 					</a>
 				</Link>
 			</li>

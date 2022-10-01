@@ -46,9 +46,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
 			};
 		}
 		return {
-			props: {
-				token
-			}
+			props: {}
 		};
 	} else {
 		const token = getHttpOnlyTokenCookie(req, res);
@@ -61,20 +59,15 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
 			};
 		}
 		return {
-			props: {
-				token
-			}
+			props: {}
 		};
 	}
 };
-export type SearchPageProps = {
-	token: TokenDto;
-};
-const SearchPage: NextPage<SearchPageProps> = (data) => {
-	const { token } = data;
+
+const SearchPage: NextPage = () => {
 	return (
 		<SearchProvider>
-			<Search token={token} />
+			<Search />
 		</SearchProvider>
 	);
 };

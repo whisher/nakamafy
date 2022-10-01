@@ -1,4 +1,3 @@
-import type { TokenDto } from '../../util/spotify';
 import type { AxiosInstance } from 'axios';
 import type { SWRConfiguration } from 'swr';
 
@@ -14,22 +13,17 @@ const axios: AxiosInstance = _axios.create({
 
 import useSWR from 'swr';
 
-const fetcher = (token: string) => (url: string) =>
+const fetcher = (url: string) =>
 	axios
 		.get(url, {
-			withCredentials: true,
-			headers: {
-				Authorization: `Bearer ${token}`
-			}
+			withCredentials: true
 		})
 		.then((res) => res.data);
 
 export const useSpotify = <TReturnDataTdo>(
 	url: string | string[] | null,
-	token: TokenDto,
 	options: SWRConfiguration = {}
 ) => {
-	const { access_token } = token;
-	const { data, error } = useSWR<TReturnDataTdo, Error>(url, fetcher(access_token), options);
+	const { data, error } = useSWR<TReturnDataTdo, Error>(url, fetcher, options);
 	return { data, error };
 };

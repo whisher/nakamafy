@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { FaSpotify } from 'react-icons/fa';
+import { useAppSelector } from '../../store/hooks';
 import { Menu } from './menu';
 
 import { APP_TITLE, ROUTES } from '../../constant';
@@ -10,6 +11,10 @@ export interface NavProps {
 }
 
 const Nav = ({ pathname }: NavProps) => {
+	const playlists = useAppSelector((state) => state.playlists.data);
+	const token = useAppSelector((state) => state.token.data);
+	console.log('playlists', playlists);
+	console.log('token', token);
 	const { profile } = ROUTES;
 	return (
 		<div className="px-6 pt-6">

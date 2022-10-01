@@ -1,6 +1,5 @@
 import type { NextPage } from 'next';
 import type { GetServerSideProps } from 'next';
-import type { TokenDto } from '../lib/util/spotify';
 
 import { REDIRECT_ROUTES } from '../lib/constant';
 import { hasTokenExpired, getHttpOnlyTokenCookie, refreshToken } from '../lib/util/spotify';
@@ -45,9 +44,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
 			};
 		}
 		return {
-			props: {
-				token
-			}
+			props: {}
 		};
 	} else {
 		const token = getHttpOnlyTokenCookie(req, res);
@@ -60,18 +57,13 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
 			};
 		}
 		return {
-			props: {
-				token
-			}
+			props: {}
 		};
 	}
 };
-export type ProfilePageProps = {
-	token: TokenDto;
-};
-const ProfilePage: NextPage<ProfilePageProps> = (data) => {
-	const { token } = data;
-	return <Profile token={token} />;
+
+const ProfilePage: NextPage = () => {
+	return <Profile />;
 };
 
 export default ProfilePage;
