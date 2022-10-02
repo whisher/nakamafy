@@ -7,7 +7,7 @@ import type {
 	MeTopArtistsDto,
 	MeTopTracksDto
 } from '@/types/spotify';
-import { useSpotify } from '../../../hooks/spotify';
+import { useSpotify } from '@/hooks/spotify';
 
 import { Alert } from '@/ui/alert';
 import { Loader } from '@/ui/loader';

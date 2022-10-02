@@ -3,8 +3,8 @@ import React from 'react';
 import type { SearchDto } from '@/types/search';
 import type { MeDto } from '@/types/spotify';
 
-import { useSearch } from '../../../hooks/search';
-import { useSpotify } from '../../../hooks/spotify';
+import { useSearch } from '@/hooks/search';
+import { useSpotify } from '@/hooks/spotify';
 
 import { Alert } from '@/ui/alert';
 
