@@ -5,7 +5,8 @@ import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 import {
 	COOKIE_SPOTIFY_STATE_KEY,
 	COOKIE_SPOTIFY_TOKEN_KEY,
-	COOKIE_SPOTIFY_REFRESH_TOKEN_KEY
+	COOKIE_SPOTIFY_REFRESH_TOKEN_KEY,
+	REDIRECT_ROUTES
 } from '../constant';
 import axios from './axios';
 
@@ -153,6 +154,65 @@ export const refreshToken = async (
 	}
 };
 
+export const isAuthenticate = async (
+	req: NextApiRequest | NextRequest,
+	res: NextApiResponse | ServerResponse
+) => {
+	const { home } = REDIRECT_ROUTES;
+	const isExpired = hasTokenExpired(req, res);
+	if (isExpired === undefined) {
+		return {
+			redirect: {
+				destination: home,
+				permanent: false
+			}
+		};
+	} else if (isExpired) {
+		const result = await refreshToken(req, res);
+		if (!result) {
+			return {
+				redirect: {
+					destination: home,
+					permanent: false
+				}
+			};
+		}
+		const isExpired = hasTokenExpired(req, res);
+		if (isExpired) {
+			return {
+				redirect: {
+					destination: home,
+					permanent: false
+				}
+			};
+		}
+		const token = getHttpOnlyTokenCookie(req, res);
+		if (!token) {
+			return {
+				redirect: {
+					destination: home,
+					permanent: false
+				}
+			};
+		}
+		return {
+			props: {}
+		};
+	} else {
+		const token = getHttpOnlyTokenCookie(req, res);
+		if (!token) {
+			return {
+				redirect: {
+					destination: home,
+					permanent: false
+				}
+			};
+		}
+		return {
+			props: {}
+		};
+	}
+};
 /**
  * Format milliseconds to time duration
  * @param {number} ms number of milliseconds

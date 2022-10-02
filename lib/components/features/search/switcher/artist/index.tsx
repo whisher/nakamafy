@@ -9,7 +9,6 @@ export interface SearchSwitcherArtistProps {
 }
 
 const SearchSwitcherArtist: React.FC<SearchSwitcherArtistProps> = ({ data }) => {
-	console.log('Artist', data);
 	return (
 		<section>
 			<article>

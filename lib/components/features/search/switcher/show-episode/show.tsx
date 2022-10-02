@@ -12,7 +12,7 @@ export interface SearchSwitcherShowCardProps {
 
 const SearchSwitcherCardShow: React.FC<SearchSwitcherShowCardProps> = ({ data }) => {
 	const { images, name, publisher } = data;
-	const avalaibleImage = images.length > 2 ? images[2] : images[0];
+	const avalaibleImage = images.length > 2 ? images[1] : images[0];
 	return (
 		<Link href={`/search`}>
 			<a className="group flex flex-col p-3 gap-3 rounded transition bg-[#181818] hover:bg-[#272727]">

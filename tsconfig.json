@@ -17,8 +17,10 @@
 		"baseUrl": ".",
 		"paths": {
 			"@/features/*": ["lib/components/features/*"],
+			"@/hooks/*": ["lib/hooks/*"],
 			"@/types/*": ["lib/types/*"],
-			"@/ui/*": ["lib/components/ui/*"]
+			"@/ui/*": ["lib/components/ui/*"],
+			"@/util/*": ["lib/util/*"]
 		},
 		"types": ["spotify-api"]
 	},
