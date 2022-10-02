@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { FaSpotify } from 'react-icons/fa';
 import { TiHeart } from 'react-icons/ti';
 import { BsPlus } from 'react-icons/bs';
-import { useGetPlaylistsQuery } from '../../hooks/query';
+import { useGetPlaylistsQuery, useCreatePlaylistMutation } from '../../hooks/query';
 import { Menu } from './menu';
 
 import { APP_TITLE, ROUTES } from '../../constant';
@@ -11,10 +11,22 @@ import { APP_TITLE, ROUTES } from '../../constant';
 export interface NavProps {
 	pathname: string;
 }
-
+//
 const Nav = ({ pathname }: NavProps) => {
 	const { data: playlists } = useGetPlaylistsQuery();
+	const [
+		createPlaylist,
+		{ isLoading: isUpdating } // This is the destructured mutation result
+	] = useCreatePlaylistMutation();
+
 	const { profile } = ROUTES;
+	const handleCreatePlaylist = () => {
+		console.log('PIPPO');
+		const items = playlists?.items;
+		const currentNum: number = items && items.length > 0 ? items.length : 0;
+		const userId = '31an5qqykjxwr64tzysztnmq6yra';
+		createPlaylist({ userId, currentNum });
+	};
 	return (
 		<div className="mx-6 pt-6">
 			<h1 className="mb-7">
@@ -31,14 +43,16 @@ const Nav = ({ pathname }: NavProps) => {
 			<Menu pathname={pathname} />
 			<ul className="flex flex-col gap-3 mt-6 pb-4 border-b border-white/20">
 				<li>
-					<Link href="/">
-						<a className="group flex items-center ">
-							<BsPlus className="h-7 w-7 rounded-sm fill-black transition bg-white/50 group-hover:bg-white" />
-							<span className="flex-1 pl-3 text-sm font-bold transition text-white/50 group-hover:text-white">
-								Create Playlist
-							</span>
-						</a>
-					</Link>
+					<button
+						type="button"
+						className="group flex items-center bg-transparent border-0"
+						onClick={handleCreatePlaylist}
+					>
+						<BsPlus className="h-7 w-7 rounded-sm fill-black transition bg-white/50 group-hover:bg-white" />
+						<span className="flex-1 pl-3 text-sm font-bold transition text-white/50 group-hover:text-white">
+							Create Playlist
+						</span>
+					</button>
 				</li>
 				<li>
 					<Link href="/">
@@ -52,7 +66,7 @@ const Nav = ({ pathname }: NavProps) => {
 				</li>
 			</ul>
 			{playlists ? (
-				<ul className="flex flex-col gap-2 mt-3">
+				<ul className="flex flex-col gap-2 mt-3 overflow-auto">
 					{playlists.items.map((playlist) => (
 						<li key={playlist.id} className="">
 							<Link href={`/playlist/${playlist.id}`}>

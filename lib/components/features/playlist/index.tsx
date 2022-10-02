@@ -13,7 +13,7 @@ const Playlist: React.FC = () => {
 	const { data, isError } = useGetPlaylistByIdQuery(id);
 
 	const { data: me, error: errorMe } = useSpotify<MeDto>('me');
-
+	console.log(me);
 	if (isError || errorMe) {
 		return <Alert />;
 	}
@@ -27,7 +27,9 @@ const Playlist: React.FC = () => {
 					</div>
 				</>
 			) : (
-				<Loader />
+				<div className="pt-14">
+					<Loader />
+				</div>
 			)}
 		</>
 	);

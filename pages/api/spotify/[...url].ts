@@ -46,17 +46,33 @@ const SpotifyApi = async (req: NextApiRequest, res: NextApiResponse<unknown>) =>
 			}
 		}
 		const { access_token } = token;
-
-		const result = await axios.get(buildUrl(url, params), {
-			headers: {
-				Authorization: `Bearer ${access_token}`
+		if (req.method === 'POST') {
+			let currentUrl = buildUrl(url, params);
+			if (currentUrl.includes('?')) {
+				currentUrl = currentUrl.slice(0, -1);
 			}
-		});
-		if ('data' in result) {
-			const data = result.data;
-			return res.status(200).json(data);
+			const result = await axios.post(currentUrl, req.body, {
+				headers: {
+					Authorization: `Bearer ${access_token}`
+				}
+			});
+			if ('data' in result) {
+				const data = result.data;
+				return res.status(200).json(data);
+			}
+			throw new Error('Invalid me Refresh Token');
+		} else {
+			const result = await axios.get(buildUrl(url, params), {
+				headers: {
+					Authorization: `Bearer ${access_token}`
+				}
+			});
+			if ('data' in result) {
+				const data = result.data;
+				return res.status(200).json(data);
+			}
+			throw new Error('Invalid me Refresh Token');
 		}
-		throw new Error('Invalid me Refresh Token');
 	} catch (error) {
 		console.error('error', error);
 		res.status(500).json(error);
