@@ -3,7 +3,8 @@ import Link from 'next/link';
 import { FaSpotify } from 'react-icons/fa';
 import { TiHeart } from 'react-icons/ti';
 import { BsPlus } from 'react-icons/bs';
-import { useGetPlaylistsQuery, useCreatePlaylistMutation } from '../../hooks/query';
+
+import { useGetMeQuery, useGetPlaylistsQuery, useCreatePlaylistMutation } from '../../hooks/query';
 import { Menu } from './menu';
 
 import { APP_TITLE, ROUTES } from '../../constant';
@@ -13,19 +14,18 @@ export interface NavProps {
 }
 //
 const Nav = ({ pathname }: NavProps) => {
+	const { data: me } = useGetMeQuery();
 	const { data: playlists } = useGetPlaylistsQuery();
-	const [
-		createPlaylist,
-		{ isLoading: isUpdating } // This is the destructured mutation result
-	] = useCreatePlaylistMutation();
+	const [createPlaylist, { isLoading: isUpdating }] = useCreatePlaylistMutation();
 
 	const { profile } = ROUTES;
 	const handleCreatePlaylist = () => {
-		console.log('PIPPO');
-		const items = playlists?.items;
-		const currentNum: number = items && items.length > 0 ? items.length : 0;
-		const userId = '31an5qqykjxwr64tzysztnmq6yra';
-		createPlaylist({ userId, currentNum });
+		if (me) {
+			const items = playlists?.items;
+			const currentNum: number = items && items.length > 0 ? items.length : 0;
+			const userId = me.id;
+			createPlaylist({ userId, currentNum });
+		}
 	};
 	return (
 		<div className="mx-6 pt-6">

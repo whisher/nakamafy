@@ -13,7 +13,7 @@ const Playlist: React.FC = () => {
 	const { data, isError } = useGetPlaylistByIdQuery(id);
 
 	const { data: me, error: errorMe } = useSpotify<MeDto>('me');
-	console.log(me);
+
 	if (isError || errorMe) {
 		return <Alert />;
 	}
@@ -21,7 +21,7 @@ const Playlist: React.FC = () => {
 		<>
 			{me && data ? (
 				<>
-					<PlaylistHeader me={me} />
+					<PlaylistHeader data={data} me={me} />
 					<div className="flex flex-col bg-gray-600">
 						<p className="text-white">oooo</p>
 					</div>
