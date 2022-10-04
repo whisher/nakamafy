@@ -1,11 +1,11 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import type { MeDto, MePlaylistDto } from '@/types/spotify';
-import type { PlaylistBaseObject } from '@/types/search';
+import type { PlaylistBaseObject, SearchDto } from '@/types/search';
 
 export const queryApi = createApi({
 	baseQuery: fetchBaseQuery({ baseUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/api/spotify/` }),
 	tagTypes: ['Playlist'],
-	refetchOnFocus: true,
+	//refetchOnFocus: true,
 	endpoints: (builder) => ({
 		getMe: builder.query<MeDto, void>({
 			query: () => `me`
@@ -28,6 +28,9 @@ export const queryApi = createApi({
 				}
 			}),
 			invalidatesTags: ['Playlist']
+		}),
+		searchForPlaylist: builder.mutation<SearchDto, string>({
+			query: (query) => `search?q=${query}&type=track`
 		})
 	})
 });
@@ -36,5 +39,6 @@ export const {
 	useGetMeQuery,
 	useGetPlaylistsQuery,
 	useGetPlaylistByIdQuery,
-	useCreatePlaylistMutation
+	useCreatePlaylistMutation,
+	useSearchForPlaylistMutation
 } = queryApi;
