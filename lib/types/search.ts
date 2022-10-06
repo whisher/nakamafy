@@ -107,7 +107,7 @@ export interface PlaylistTrackObject {
 	added_at: string;
 	added_by: UserObjectPublic;
 	is_local: boolean;
-	track: TrackObjectFull | null;
+	track: TrackObjectFull;
 }
 
 export interface RestrictionsObject {

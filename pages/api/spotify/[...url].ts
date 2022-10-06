@@ -11,6 +11,9 @@ const axios: AxiosInstance = _axios.create({
 	},
 	timeout: 3000
 });
+function isEmptyObject(value: { [x: string]: string | string[] | undefined }) {
+	return Object.keys(value).length === 0 && value.constructor === Object;
+}
 
 const buildUrl = (
 	url: string | string[] | undefined,
@@ -21,9 +24,10 @@ const buildUrl = (
 	if (!url || !Array.isArray(url)) {
 		throw new Error('Invalid url');
 	}
-	if (!params) {
+	if (isEmptyObject(params)) {
 		return url.join('/');
 	}
+	console.log('params', params);
 	return `${url.join('/')}?${qs.stringify(params)}`;
 };
 const SpotifyApi = async (req: NextApiRequest, res: NextApiResponse<unknown>) => {
@@ -47,10 +51,7 @@ const SpotifyApi = async (req: NextApiRequest, res: NextApiResponse<unknown>) =>
 		}
 		const { access_token } = token;
 		if (req.method === 'POST') {
-			let currentUrl = buildUrl(url, params);
-			if (currentUrl.includes('?')) {
-				currentUrl = currentUrl.slice(0, -1);
-			}
+			const currentUrl = buildUrl(url, params);
 			const result = await axios.post(currentUrl, req.body, {
 				headers: {
 					Authorization: `Bearer ${access_token}`
@@ -62,7 +63,8 @@ const SpotifyApi = async (req: NextApiRequest, res: NextApiResponse<unknown>) =>
 			}
 			throw new Error('Invalid me Refresh Token');
 		} else {
-			const result = await axios.get(buildUrl(url, params), {
+			const currentUrl = buildUrl(url, params);
+			const result = await axios.get(currentUrl, {
 				headers: {
 					Authorization: `Bearer ${access_token}`
 				}

@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { FaSpotify } from 'react-icons/fa';
 import { TiHeart } from 'react-icons/ti';
 import { BsPlus } from 'react-icons/bs';
@@ -14,6 +15,8 @@ export interface NavProps {
 }
 //
 const Nav = ({ pathname }: NavProps) => {
+	const { asPath } = useRouter();
+	const playlistId = asPath.includes('playlist') ? asPath.split('/')[2] : undefined;
 	const { data: me } = useGetMeQuery();
 	const { data: playlists } = useGetPlaylistsQuery();
 	const [createPlaylist, { isLoading: isUpdating }] = useCreatePlaylistMutation();
@@ -67,11 +70,15 @@ const Nav = ({ pathname }: NavProps) => {
 			</ul>
 			{playlists ? (
 				<ul className="flex flex-col gap-2 mt-3 overflow-auto">
-					{playlists.items.map((playlist) => (
-						<li key={playlist.id} className="">
-							<Link href={`/playlist/${playlist.id}`}>
-								<a className="text-sm font-bold transition text-white/50 hover:text-white cursor-default">
-									{playlist?.name}
+					{playlists.items.map(({ id, name }) => (
+						<li key={id} className="">
+							<Link href={`/playlist/${id}`}>
+								<a
+									className={`text-sm font-bold transition  hover:text-white cursor-default ${
+										playlistId === id ? 'text-white' : 'text-white/50'
+									}`}
+								>
+									{name}
 								</a>
 							</Link>
 						</li>

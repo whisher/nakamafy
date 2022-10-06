@@ -8,16 +8,21 @@ import { formatDuration } from '../../../util/spotify';
 
 export interface PlaylistSearchResultProps {
 	data: TrackObjectFull[] | undefined;
+	addToPlaylistHandler: (uri: string) => void;
 }
 
-const PlaylistSearchResult: React.FC<PlaylistSearchResultProps> = ({ data }) => {
+const PlaylistSearchResult: React.FC<PlaylistSearchResultProps> = ({
+	data,
+	addToPlaylistHandler
+}) => {
+	console.log('Tracks', data);
 	return (
 		<section>
 			<article>
 				<>
 					{data && data.length > 0 ? (
 						<ul className="group flex flex-col gap-3 mt-6">
-							{data.map(({ album, artists, id, name }, i) => (
+							{data.map(({ album, artists, id, name, uri }, i) => (
 								<li className="flex items-center hover:bg-[#2a2a2a]" key={id}>
 									<div className="w-7/12 flex items-center">
 										{album.images.length > 1 && album.images[2] && (
@@ -40,6 +45,7 @@ const PlaylistSearchResult: React.FC<PlaylistSearchResultProps> = ({ data }) => 
 									<div className="w-3/12 text-white/50">{album.name}</div>
 									<div className="w-2/12 text-right text-white/50">
 										<button
+											onClick={() => addToPlaylistHandler(uri)}
 											type="button"
 											className="h-7 w-16 flex justify-center items-center bg-transparent border border-white/50 rounded-full text-sm text-white"
 										>

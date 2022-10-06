@@ -1,12 +1,12 @@
 import React from 'react';
-import type { PlaylistBaseObject } from '@/types/search';
+import type { PlaylistObjectFull } from '@/types/search';
 import type { MeDto } from '@/types/spotify';
 import Image from 'next/image';
 import { RiMusic2Line } from 'react-icons/ri';
 import { Account } from '@/ui/account';
 import { Bck } from './bck';
 export interface PlaylistHeaderProps {
-	data: PlaylistBaseObject;
+	data: PlaylistObjectFull;
 	me: MeDto;
 }
 
@@ -18,7 +18,6 @@ const PlaylistHeader = ({ data, me }: PlaylistHeaderProps) => {
 		owner: { display_name },
 		type
 	} = data;
-	console.log(' data', data);
 	return (
 		<Bck url={images[0]?.url}>
 			<div className="h-80 relative">
