@@ -25,7 +25,6 @@ const Playlist: React.FC = () => {
 	if (isError || errorMe) {
 		return <Alert />;
 	}
-	console.log('Playlist', data);
 	const searchHandler = (query: string) => {
 		searchForPlaylist(query);
 	};

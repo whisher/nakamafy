@@ -11,9 +11,10 @@ const axios: AxiosInstance = _axios.create({
 	},
 	timeout: 3000
 });
-function isEmptyObject(value: { [x: string]: string | string[] | undefined }) {
+
+const isEmptyObject = (value: { [x: string]: string | string[] | undefined }): boolean => {
 	return Object.keys(value).length === 0 && value.constructor === Object;
-}
+};
 
 const buildUrl = (
 	url: string | string[] | undefined,
@@ -27,7 +28,6 @@ const buildUrl = (
 	if (isEmptyObject(params)) {
 		return url.join('/');
 	}
-	console.log('params', params);
 	return `${url.join('/')}?${qs.stringify(params)}`;
 };
 const SpotifyApi = async (req: NextApiRequest, res: NextApiResponse<unknown>) => {

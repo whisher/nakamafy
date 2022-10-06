@@ -15,7 +15,6 @@ const PlaylistSearchResult: React.FC<PlaylistSearchResultProps> = ({
 	data,
 	addToPlaylistHandler
 }) => {
-	console.log('Tracks', data);
 	return (
 		<section>
 			<article>
