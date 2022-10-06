@@ -27,7 +27,7 @@ const SearchSwitcher: React.FC<SearchSwitcherProps> = ({ data, error, type }) =>
 	}
 	if (!data) {
 		return (
-			<div className="mt-14">
+			<div className="pt-14">
 				<Loader />
 			</div>
 		);

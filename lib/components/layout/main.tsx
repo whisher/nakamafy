@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 import { useRouter } from 'next/router';
 import { ApiProvider } from '@reduxjs/toolkit/query/react';
+
 import { queryApi } from '../../hooks/query';
 import { Nav } from './nav';
 

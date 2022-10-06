@@ -11,6 +11,9 @@ const axios: AxiosInstance = _axios.create({
 	},
 	timeout: 3000
 });
+function isEmptyObject(value: { [x: string]: string | string[] | undefined }) {
+	return Object.keys(value).length === 0 && value.constructor === Object;
+}
 
 const buildUrl = (
 	url: string | string[] | undefined,
@@ -21,9 +24,10 @@ const buildUrl = (
 	if (!url || !Array.isArray(url)) {
 		throw new Error('Invalid url');
 	}
-	if (!params) {
+	if (isEmptyObject(params)) {
 		return url.join('/');
 	}
+	console.log('params', params);
 	return `${url.join('/')}?${qs.stringify(params)}`;
 };
 const SpotifyApi = async (req: NextApiRequest, res: NextApiResponse<unknown>) => {
@@ -46,17 +50,31 @@ const SpotifyApi = async (req: NextApiRequest, res: NextApiResponse<unknown>) =>
 			}
 		}
 		const { access_token } = token;
-
-		const result = await axios.get(buildUrl(url, params), {
-			headers: {
-				Authorization: `Bearer ${access_token}`
+		if (req.method === 'POST') {
+			const currentUrl = buildUrl(url, params);
+			const result = await axios.post(currentUrl, req.body, {
+				headers: {
+					Authorization: `Bearer ${access_token}`
+				}
+			});
+			if ('data' in result) {
+				const data = result.data;
+				return res.status(200).json(data);
 			}
-		});
-		if ('data' in result) {
-			const data = result.data;
-			return res.status(200).json(data);
+			throw new Error('Invalid me Refresh Token');
+		} else {
+			const currentUrl = buildUrl(url, params);
+			const result = await axios.get(currentUrl, {
+				headers: {
+					Authorization: `Bearer ${access_token}`
+				}
+			});
+			if ('data' in result) {
+				const data = result.data;
+				return res.status(200).json(data);
+			}
+			throw new Error('Invalid me Refresh Token');
 		}
-		throw new Error('Invalid me Refresh Token');
 	} catch (error) {
 		console.error('error', error);
 		res.status(500).json(error);

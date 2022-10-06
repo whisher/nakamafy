@@ -51,7 +51,7 @@ const ProfileTopArtists: React.FC<ProfileTopArtistsProps> = ({ data }) => {
 								))}
 							</ul>
 						) : (
-							<p className="empty-notice">No tracks available</p>
+							<p className="empty-notice">No top artists available</p>
 						)}
 					</>
 				</Spacer>
