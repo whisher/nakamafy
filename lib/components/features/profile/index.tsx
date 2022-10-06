@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 
 import type {
-	MeDto,
 	MeFollowingDto,
 	MePlaylistDto,
 	MeTopArtistsDto,
 	MeTopTracksDto
 } from '@/types/spotify';
 import { useSpotify } from '@/hooks/spotify';
-
+import {
+	useGetMeQuery,
+	useGetMeFollowingArtistQuery,
+	useGetMeTopArtistsQuery
+} from '@/hooks/query';
 import { Alert } from '@/ui/alert';
 import { Loader } from '@/ui/loader';
 import { ProfileFollowing } from './following';
@@ -21,13 +24,9 @@ const Profile: React.FC = () => {
 	const [apiTracksQueryParams, setApiTracksQueryParams] = useState<string>(
 		'?time_range=short_term&limit=10&offset=0'
 	);
-	const { data: me, error: errorMe } = useSpotify<MeDto>('me');
-	const { data: meFollowing, error: errorFollowing } = useSpotify<MeFollowingDto>(
-		'me/following?type=artist'
-	);
-	const { data: meTopArtists, error: errorTopArtists } = useSpotify<MeTopArtistsDto>(
-		'me/top/artists?time_range=short_term'
-	);
+	const { data: me, error: errorMe } = useGetMeQuery();
+	const { data: meFollowing, error: errorFollowing } = useGetMeFollowingArtistQuery();
+	const { data: meTopArtists, error: errorTopArtists } = useGetMeTopArtistsQuery();
 	const { data: meTopTracks, error: errorTopTracks } = useSpotify<MeTopTracksDto>(
 		`me/top/tracks${apiTracksQueryParams}`
 	);

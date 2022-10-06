@@ -1,15 +1,20 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import type { MeDto, MePlaylistDto } from '@/types/spotify';
+import type { MeDto, MeFollowingDto, MePlaylistDto, MeTopArtistsDto } from '@/types/spotify';
 import type { PlaylistBaseObject, PlaylistObjectFull, SearchDto } from '@/types/search';
-import { parseArgs } from 'util';
 
 export const queryApi = createApi({
 	baseQuery: fetchBaseQuery({ baseUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/api/spotify/` }),
 	tagTypes: ['Playlist'],
-	//refetchOnFocus: true,
+	refetchOnFocus: true,
 	endpoints: (builder) => ({
 		getMe: builder.query<MeDto, void>({
 			query: () => `me`
+		}),
+		getMeFollowingArtist: builder.query<MeFollowingDto, void>({
+			query: () => `me/following?type=artist`
+		}),
+		getMeTopArtists: builder.query<MeTopArtistsDto, void>({
+			query: () => `me/top/artists?time_range=short_term`
 		}),
 		getPlaylists: builder.query<MePlaylistDto, void>({
 			query: () => `me/playlists`,
@@ -47,6 +52,8 @@ export const queryApi = createApi({
 
 export const {
 	useGetMeQuery,
+	useGetMeFollowingArtistQuery,
+	useGetMeTopArtistsQuery,
 	useGetPlaylistsQuery,
 	useGetPlaylistByIdQuery,
 	useCreatePlaylistMutation,
