@@ -1,5 +1,11 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import type { MeDto, MeFollowingDto, MePlaylistDto, MeTopArtistsDto } from '@/types/spotify';
+import type {
+	MeDto,
+	MeFollowingDto,
+	MePlaylistDto,
+	MeTopArtistsDto,
+	MeTopTracksDto
+} from '@/types/spotify';
 import type { PlaylistBaseObject, PlaylistObjectFull, SearchDto } from '@/types/search';
 
 export const queryApi = createApi({
@@ -15,6 +21,9 @@ export const queryApi = createApi({
 		}),
 		getMeTopArtists: builder.query<MeTopArtistsDto, void>({
 			query: () => `me/top/artists?time_range=short_term`
+		}),
+		getMeTopTracks: builder.query<MeTopTracksDto, string>({
+			query: (queryParams) => `me/top/tracks${queryParams}`
 		}),
 		getPlaylists: builder.query<MePlaylistDto, void>({
 			query: () => `me/playlists`,
@@ -54,6 +63,7 @@ export const {
 	useGetMeQuery,
 	useGetMeFollowingArtistQuery,
 	useGetMeTopArtistsQuery,
+	useGetMeTopTracksQuery,
 	useGetPlaylistsQuery,
 	useGetPlaylistByIdQuery,
 	useCreatePlaylistMutation,
