@@ -53,6 +53,9 @@ export const queryApi = createApi({
 			}),
 			invalidatesTags: (result, error, arg) => [{ type: 'Playlist', id: arg.playlistId }]
 		}),
+		searchForQueryAndType: builder.query<SearchDto, string>({
+			query: (path) => `search${path}`
+		}),
 		searchForPlaylist: builder.mutation<SearchDto, string>({
 			query: (query) => `search?q=${query}&type=track`
 		})
@@ -68,5 +71,6 @@ export const {
 	useGetPlaylistByIdQuery,
 	useCreatePlaylistMutation,
 	useAddTrackToPlaylistMutation,
+	useSearchForQueryAndTypeQuery,
 	useSearchForPlaylistMutation
 } = queryApi;

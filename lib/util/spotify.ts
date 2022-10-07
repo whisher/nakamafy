@@ -25,6 +25,12 @@ export type NextRequest = IncomingMessage & {
 	cookies?: { [key: string]: string } | Partial<{ [key: string]: string }>;
 };
 
+export const decodeBase64 = (strB64: string): string => {
+	return Buffer.from(strB64, 'base64').toString('ascii');
+};
+export const encodeBase64 = (strB64: string): string => {
+	return Buffer.from(strB64).toString('base64');
+};
 export const getHttpOnlyRefreshTokenCookie = (
 	req: NextApiRequest | NextRequest,
 	res: NextApiResponse | ServerResponse
@@ -38,7 +44,7 @@ export const getHttpOnlyRefreshTokenCookie = (
 		return false;
 	}
 
-	return Buffer.from(String(tokenJsonB64), 'base64').toString('ascii');
+	return decodeBase64(tokenJsonB64 as string);
 };
 
 export const setHttpOnlyRefreshTokenCookie = (
@@ -68,7 +74,7 @@ export const getHttpOnlyTokenCookie = (
 	if (!tokenJsonB64) {
 		return false;
 	}
-	return JSON.parse(Buffer.from(String(tokenJsonB64), 'base64').toString('ascii')) as TokenDto;
+	return JSON.parse(decodeBase64(tokenJsonB64 as string)) as TokenDto;
 };
 
 export const setHttpOnlyTokenCookie = (
@@ -84,7 +90,7 @@ export const setHttpOnlyTokenCookie = (
 	}
 	token.timestamp = Date.now(); //  - 1000 * 60 refresh token one minute before expired
 	let tokenJsonStr = JSON.stringify(token);
-	let tokenJsonB64 = Buffer.from(tokenJsonStr).toString('base64');
+	let tokenJsonB64 = encodeBase64(tokenJsonStr);
 	setCookie(COOKIE_SPOTIFY_TOKEN_KEY, tokenJsonB64, {
 		req,
 		res,

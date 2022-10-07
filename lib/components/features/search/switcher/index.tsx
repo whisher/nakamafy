@@ -2,6 +2,8 @@ import React from 'react';
 
 import type { SearchDto } from '@/types/search';
 import type { MenuTypesDto } from '../../../../hooks/search';
+import type { SerializedError } from '@reduxjs/toolkit';
+import type { FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
 
 import { Alert } from '@/ui/alert';
 import { Loader } from '@/ui/loader';
@@ -13,7 +15,7 @@ import { SearchSwitcherTrack } from './track';
 
 export interface SearchSwitcherProps {
 	data: SearchDto | undefined;
-	error: Error | undefined;
+	error: SerializedError | FetchBaseQueryError | undefined;
 	type: MenuTypesDto | undefined;
 }
 
