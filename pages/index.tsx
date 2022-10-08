@@ -2,12 +2,13 @@ import type { NextPage } from 'next';
 import type { GetServerSideProps } from 'next';
 
 import { REDIRECT_ROUTES } from '../lib/constant';
-import { hasTokenExpired, refreshToken } from '../lib/util/spotify';
+import { hasTokenExpired, getHttpOnlyTokenCookie, refreshToken } from '../lib/util/spotify';
 import { Home } from '@/features/home';
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
 	const { profile } = REDIRECT_ROUTES;
-	const isExpired = hasTokenExpired(req, res);
+	const token = getHttpOnlyTokenCookie(req, res);
+	const isExpired = hasTokenExpired(token);
 	if (isExpired === undefined) {
 		return {
 			props: {}
@@ -17,15 +18,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
 		if (!result) {
 			return {
 				props: {}
-			};
-		}
-		const isExpired = hasTokenExpired(req, res);
-		if (!isExpired) {
-			return {
-				redirect: {
-					destination: profile,
-					permanent: false
-				}
 			};
 		}
 		return {
