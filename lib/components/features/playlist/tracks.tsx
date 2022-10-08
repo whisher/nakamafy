@@ -4,8 +4,7 @@ import type { PagingObject, PlaylistTrackObject } from '@/types/search';
 import Image from 'next/image';
 import { IoMdArrowDropdown } from 'react-icons/io';
 import { IoTimeOutline } from 'react-icons/io5';
-import { fromNow } from '../../../util/moment';
-import { formatDuration } from '../../../util/spotify';
+import { formatDuration, fromNow } from '@/util/moment';
 
 export interface SearchSwitcherTrackProps {
 	data: PagingObject<PlaylistTrackObject>;

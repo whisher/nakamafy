@@ -3,7 +3,7 @@ import type { MeTopTracksDto } from '@/types/spotify';
 import Image from 'next/image';
 
 import { IoMdHeartEmpty, IoIosMore, IoMdArrowDropdown } from 'react-icons/io';
-import { formatDuration } from '@/util/spotify';
+import { formatDuration } from '@/util/moment';
 
 export interface ProfileTopTracksProps {
 	data: MeTopTracksDto;

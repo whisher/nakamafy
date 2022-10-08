@@ -38,7 +38,6 @@ const ProfilePlaylists: React.FC<ProfilePlaylistsProps> = ({ data }) => {
 										</button>
 									</div>
 									<h3 className="text-white">{name}</h3>
-									<p className="text-white">Playlist</p>
 								</a>
 							</Link>
 						))}

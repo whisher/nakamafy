@@ -21,8 +21,7 @@
 			"@/types/*": ["lib/types/*"],
 			"@/ui/*": ["lib/components/ui/*"],
 			"@/util/*": ["lib/util/*"]
-		},
-		"types": ["spotify-api"]
+		}
 	},
 	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
 	"exclude": ["node_modules"]

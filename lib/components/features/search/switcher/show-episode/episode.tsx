@@ -3,7 +3,7 @@ import type { EpisodeObjectSimplified } from '@/types/search';
 
 import Link from 'next/link';
 import { IoMdArrowDropdown } from 'react-icons/io';
-import { toHHMMSS, humanReadable } from '../../../../../util/spotify';
+import { toHHMMSS, humanReadable } from '@/util/moment';
 
 import { Image } from '@/ui/image';
 

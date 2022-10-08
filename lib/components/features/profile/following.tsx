@@ -2,8 +2,6 @@ import React from 'react';
 import type { MeFollowingDto } from '@/types/spotify';
 import Image from 'next/image';
 
-import { Spacer } from '@/ui/spacer';
-
 export interface ProfileFollowingProps {
 	data: MeFollowingDto;
 }

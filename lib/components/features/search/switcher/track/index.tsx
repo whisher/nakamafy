@@ -4,7 +4,7 @@ import type { TrackObjectFull } from '@/types/search';
 import Image from 'next/image';
 import { IoMdArrowDropdown } from 'react-icons/io';
 import { IoTimeOutline } from 'react-icons/io5';
-import { formatDuration } from '../../../../../util/spotify';
+import { formatDuration } from '@/util/moment';
 
 export interface SearchSwitcherTrackProps {
 	data: TrackObjectFull[] | undefined;
