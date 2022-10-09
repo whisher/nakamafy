@@ -130,7 +130,7 @@ export const setHttpOnlyTokenCookie = (
 
 export const hasTokenExpired = (strB64: string | false): boolean | undefined => {
 	if (!strB64) {
-		return true;
+		return undefined;
 	}
 	const tokenJson = decodeBase64(strB64);
 	const token = JSON.parse(tokenJson) as TokenDto;
