@@ -213,7 +213,3 @@ export const isAuthenticate = async (
 		};
 	}
 };
-
-/* 
-const tokenJson = decodeBase64(strB64);
-	return JSON.parse(tokenJson) as TokenDto;*/
