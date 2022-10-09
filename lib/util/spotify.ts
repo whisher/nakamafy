@@ -1,4 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import type { AxiosResponse } from 'axios';
+import axios from 'axios';
 import { IncomingMessage, ServerResponse } from 'http';
 import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 
@@ -8,7 +10,11 @@ import {
 	COOKIE_SPOTIFY_REFRESH_TOKEN_KEY,
 	REDIRECT_ROUTES
 } from '../constant';
-import axios from './axios';
+
+export type DataParamName = 'grant_type' | 'refresh_token';
+
+const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
+const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
 
 export interface TokenDto {
 	access_token: string;
@@ -21,6 +27,7 @@ export interface TokenDto {
 
 const COOKIE_SECURE = process.env.NODE_ENV === 'production' ? true : false;
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 30;
+const COOKIE_SAME_SITE = 'none';
 export type NextRequest = IncomingMessage & {
 	cookies?: { [key: string]: string } | Partial<{ [key: string]: string }>;
 };
@@ -28,8 +35,28 @@ export type NextRequest = IncomingMessage & {
 export const decodeBase64 = (strB64: string): string => {
 	return Buffer.from(strB64, 'base64').toString('ascii');
 };
-export const encodeBase64 = (strB64: string): string => {
-	return Buffer.from(strB64).toString('base64');
+export const encodeBase64 = (str: string): string => {
+	return Buffer.from(str).toString('base64');
+};
+
+export const getRefreshToken = async (refreshToken: string): Promise<AxiosResponse<any, any>> => {
+	const buffer = Buffer.from(`${String(CLIENT_ID)}:${String(CLIENT_SECRET)}`).toString('base64');
+	const params: Record<DataParamName, string> = {
+		grant_type: 'refresh_token',
+		refresh_token: String(refreshToken)
+	};
+
+	const data = new URLSearchParams(params).toString();
+
+	return await axios({
+		method: 'post',
+		url: 'https://accounts.spotify.com/api/token',
+		data,
+		headers: {
+			'content-type': 'application/x-www-form-urlencoded',
+			Authorization: `Basic ${buffer}`
+		}
+	});
 };
 export const getHttpOnlyRefreshTokenCookie = (
 	req: NextApiRequest | NextRequest,
@@ -59,22 +86,22 @@ export const setHttpOnlyRefreshTokenCookie = (
 		maxAge: COOKIE_MAX_AGE,
 		secure: COOKIE_SECURE,
 		httpOnly: true,
-		sameSite: 'none'
+		sameSite: COOKIE_SAME_SITE
 	});
 };
 
 export const getHttpOnlyTokenCookie = (
 	req: NextApiRequest | NextRequest,
 	res: NextApiResponse | ServerResponse
-): TokenDto | false => {
-	const tokenJsonB64 = getCookie(COOKIE_SPOTIFY_TOKEN_KEY, {
+): string | false => {
+	const strB64 = getCookie(COOKIE_SPOTIFY_TOKEN_KEY, {
 		req,
 		res
 	});
-	if (!tokenJsonB64) {
+	if (typeof strB64 === 'boolean' || !strB64) {
 		return false;
 	}
-	return JSON.parse(decodeBase64(tokenJsonB64 as string)) as TokenDto;
+	return strB64;
 };
 
 export const setHttpOnlyTokenCookie = (
@@ -97,18 +124,16 @@ export const setHttpOnlyTokenCookie = (
 		maxAge: COOKIE_MAX_AGE,
 		secure: COOKIE_SECURE,
 		httpOnly: true,
-		sameSite: 'none'
+		sameSite: COOKIE_SAME_SITE
 	});
 };
 
-export const hasTokenExpired = (
-	req: NextApiRequest | NextRequest,
-	res: NextApiResponse | ServerResponse
-): boolean | undefined => {
-	const token = getHttpOnlyTokenCookie(req, res);
-	if (!token) {
-		return undefined;
+export const hasTokenExpired = (strB64: string | false): boolean | undefined => {
+	if (!strB64) {
+		return true;
 	}
+	const tokenJson = decodeBase64(strB64);
+	const token = JSON.parse(tokenJson) as TokenDto;
 	const { timestamp, expires_in } = token;
 	const millisecondsElapsed = Date.now() - Number(timestamp);
 	return millisecondsElapsed / 1000 > Number(expires_in);
@@ -137,17 +162,12 @@ export const refreshToken = async (
 	res: NextApiResponse | ServerResponse
 ): Promise<boolean> => {
 	try {
-		const isExpired = hasTokenExpired(req, res);
-		if (isExpired === undefined) {
-			console.error('Invalid token');
-			logout(req, res);
-			throw new Error('Invalid token');
+		const refresh_token = getHttpOnlyRefreshTokenCookie(req, res);
+
+		if (!refresh_token) {
+			throw new Error('Invalid api refresh token');
 		}
-		const result = await axios.get('/api/refresh_token', {
-			headers: {
-				Cookie: String(req.headers.cookie)
-			}
-		});
+		const result = await getRefreshToken(refresh_token);
 		if ('data' in result) {
 			const newToken = result.data as TokenDto;
 			setHttpOnlyTokenCookie(newToken, req, res);
@@ -165,7 +185,8 @@ export const isAuthenticate = async (
 	res: NextApiResponse | ServerResponse
 ) => {
 	const { home } = REDIRECT_ROUTES;
-	const isExpired = hasTokenExpired(req, res);
+	const token = getHttpOnlyTokenCookie(req, res);
+	const isExpired = hasTokenExpired(token);
 	if (isExpired === undefined) {
 		return {
 			redirect: {
@@ -183,39 +204,16 @@ export const isAuthenticate = async (
 				}
 			};
 		}
-		const isExpired = hasTokenExpired(req, res);
-		if (isExpired) {
-			return {
-				redirect: {
-					destination: home,
-					permanent: false
-				}
-			};
-		}
-		const token = getHttpOnlyTokenCookie(req, res);
-		if (!token) {
-			return {
-				redirect: {
-					destination: home,
-					permanent: false
-				}
-			};
-		}
 		return {
 			props: {}
 		};
 	} else {
-		const token = getHttpOnlyTokenCookie(req, res);
-		if (!token) {
-			return {
-				redirect: {
-					destination: home,
-					permanent: false
-				}
-			};
-		}
 		return {
 			props: {}
 		};
 	}
 };
+
+/* 
+const tokenJson = decodeBase64(strB64);
+	return JSON.parse(tokenJson) as TokenDto;*/
