@@ -4,6 +4,7 @@ export function middleware(request: NextRequest) {
 	const response = NextResponse.next();
 
 	if (request.nextUrl.pathname === '/profile') {
+		response.cookies.set('vercel', 'fast');
 		const cookie = request.cookies.get(COOKIE_SPOTIFY_TOKEN_KEY);
 		//console.log(cookie); // => 'fast'
 	}
@@ -14,5 +15,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-	matcher: ['/api/callback', '/profile']
+	matcher: ['/profile']
 };

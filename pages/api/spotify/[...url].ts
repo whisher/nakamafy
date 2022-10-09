@@ -9,6 +9,7 @@ import {
 	hasTokenExpired,
 	refreshToken
 } from '../../../lib/util/spotify';
+import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 
 const axios: AxiosInstance = _axios.create({
 	baseURL: 'https://api.spotify.com/v1',
@@ -86,7 +87,7 @@ const SpotifyApi = async (req: NextApiRequest, res: NextApiResponse<unknown>) =>
 		}
 	} catch (error) {
 		if (isProduction) {
-			res.redirect(307, '/');
+			res.redirect(307, '/404');
 		}
 		console.error('error', error);
 		res.status(500).json(error);

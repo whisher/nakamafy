@@ -1,4 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import type { AxiosResponse } from 'axios';
+import axios from 'axios';
 import { IncomingMessage, ServerResponse } from 'http';
 import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 
@@ -8,7 +10,11 @@ import {
 	COOKIE_SPOTIFY_REFRESH_TOKEN_KEY,
 	REDIRECT_ROUTES
 } from '../constant';
-import axios from './axios';
+
+export type DataParamName = 'grant_type' | 'refresh_token';
+
+const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
+const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
 
 export interface TokenDto {
 	access_token: string;
@@ -31,6 +37,26 @@ export const decodeBase64 = (strB64: string): string => {
 };
 export const encodeBase64 = (str: string): string => {
 	return Buffer.from(str).toString('base64');
+};
+
+export const getRefreshToken = async (refreshToken: string): Promise<AxiosResponse<any, any>> => {
+	const buffer = Buffer.from(`${String(CLIENT_ID)}:${String(CLIENT_SECRET)}`).toString('base64');
+	const params: Record<DataParamName, string> = {
+		grant_type: 'refresh_token',
+		refresh_token: String(refreshToken)
+	};
+
+	const data = new URLSearchParams(params).toString();
+
+	return await axios({
+		method: 'post',
+		url: 'https://accounts.spotify.com/api/token',
+		data,
+		headers: {
+			'content-type': 'application/x-www-form-urlencoded',
+			Authorization: `Basic ${buffer}`
+		}
+	});
 };
 export const getHttpOnlyRefreshTokenCookie = (
 	req: NextApiRequest | NextRequest,
@@ -110,7 +136,6 @@ export const hasTokenExpired = (strB64: string | false): boolean | undefined => 
 	const token = JSON.parse(tokenJson) as TokenDto;
 	const { timestamp, expires_in } = token;
 	const millisecondsElapsed = Date.now() - Number(timestamp);
-	console.log('hasTokenExpired', millisecondsElapsed / 1000, expires_in);
 	return millisecondsElapsed / 1000 > Number(expires_in);
 };
 
@@ -137,11 +162,12 @@ export const refreshToken = async (
 	res: NextApiResponse | ServerResponse
 ): Promise<boolean> => {
 	try {
-		const result = await axios.get('/api/refresh_token', {
-			headers: {
-				Cookie: String(req.headers.cookie)
-			}
-		});
+		const refresh_token = getHttpOnlyRefreshTokenCookie(req, res);
+
+		if (!refresh_token) {
+			throw new Error('Invalid api refresh token');
+		}
+		const result = await getRefreshToken(refresh_token);
 		if ('data' in result) {
 			const newToken = result.data as TokenDto;
 			setHttpOnlyTokenCookie(newToken, req, res);
@@ -178,6 +204,9 @@ export const isAuthenticate = async (
 				}
 			};
 		}
+		return {
+			props: {}
+		};
 	} else {
 		return {
 			props: {}
