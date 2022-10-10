@@ -1,4 +1,5 @@
 export const APP_TITLE = 'Nakamafy';
+export const APP_EMAIL = 'io@ilwebdifabio.it';
 export const COOKIE_SPOTIFY_STATE_KEY = 'spotify_auth_state';
 export const COOKIE_SPOTIFY_TOKEN_KEY = 'spotify_auth_token';
 export const COOKIE_SPOTIFY_REFRESH_TOKEN_KEY = 'spotify_auth_refresh_token';
