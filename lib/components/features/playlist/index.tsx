@@ -7,7 +7,7 @@ import {
 	useGetPlaylistByIdQuery,
 	useSearchForPlaylistMutation,
 	useAddTrackToPlaylistMutation
-} from '@/hooks/query';
+} from '@/hooks/query/service';
 
 import { Alert } from '@/ui/alert';
 import { Loader } from '@/ui/loader';
@@ -15,12 +15,11 @@ import { PlaylistHeader } from './header';
 import { PlaylistSearchResult } from './search-result';
 import { PlaylistSearchForm } from './form';
 import { PlaylistTracks } from './tracks';
-const Playlist: React.FC = () => {
-	const { asPath } = useRouter();
-	const playlistId = asPath.split('/')[2];
-	const { data, isError } = useGetPlaylistByIdQuery(playlistId);
+const Playlist: React.FC<{ id: string }> = ({ id }) => {
+	//const { data, isError } = useGetPlaylistByIdQuery(id);
 	const { data: me, isError: errorMe } = useGetMeQuery();
-	const [searchForPlaylist, { isSuccess, data: dataSearchResult }] = useSearchForPlaylistMutation();
+	console.log('ME', me);
+	/*const [searchForPlaylist, { isSuccess, data: dataSearchResult }] = useSearchForPlaylistMutation();
 	const [addToPlaylist, { isSuccess: isSuccessAdded }] = useAddTrackToPlaylistMutation();
 	if (isError || errorMe) {
 		return <Alert />;
@@ -30,10 +29,11 @@ const Playlist: React.FC = () => {
 	};
 	const addToPlaylistHandler = (uri: string) => {
 		addToPlaylist({ playlistId, uri });
-	};
+	};*/
 	return (
 		<>
-			{me && data ? (
+			{me ? <h1>{me.display_name}</h1> : <>Loading...</>}
+			{/*data && me ? (
 				<div className="h-full bg-[#121212]">
 					<PlaylistHeader data={data} me={me} />
 					<div className="flex flex-col px-6 pt-6 bg-gradient-to-b from-[#212121] to-[#121212]">
@@ -69,7 +69,7 @@ const Playlist: React.FC = () => {
 				<div className="pt-14">
 					<Loader />
 				</div>
-			)}
+			)*/}
 		</>
 	);
 };

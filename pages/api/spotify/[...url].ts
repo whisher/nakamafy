@@ -1,15 +1,15 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import type { AxiosInstance } from 'axios';
 import type { TokenDto } from '@/util/spotify';
-import qs from 'qs';
+
 import { default as _axios } from 'axios';
 import {
 	decodeBase64,
 	getHttpOnlyTokenCookie,
 	hasTokenExpired,
 	refreshToken
-} from '../../../lib/util/spotify';
-import { deleteCookie, getCookie, setCookie } from 'cookies-next';
+} from '@/util/spotify';
+import { buildUrl } from '@/util/url';
 
 const axios: AxiosInstance = _axios.create({
 	baseURL: 'https://api.spotify.com/v1',
@@ -23,24 +23,6 @@ const axios: AxiosInstance = _axios.create({
 });
 
 const isProduction = process.env.NODE_ENV === 'production' ? true : false;
-const isEmptyObject = (value: { [x: string]: string | string[] | undefined }): boolean => {
-	return Object.keys(value).length === 0 && value.constructor === Object;
-};
-
-const buildUrl = (
-	url: string | string[] | undefined,
-	params: {
-		[x: string]: string | string[] | undefined;
-	}
-) => {
-	if (!url || !Array.isArray(url)) {
-		throw new Error('Invalid spotify app url');
-	}
-	if (isEmptyObject(params)) {
-		return url.join('/');
-	}
-	return `${url.join('/')}?${qs.stringify(params)}`;
-};
 
 const SpotifyApi = async (req: NextApiRequest, res: NextApiResponse<unknown>) => {
 	const { url, ...params } = req.query;

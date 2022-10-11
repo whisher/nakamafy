@@ -58,6 +58,7 @@ export const getRefreshToken = async (refreshToken: string): Promise<AxiosRespon
 		}
 	});
 };
+
 export const getHttpOnlyRefreshTokenCookie = (
 	req: NextApiRequest | NextRequest,
 	res: NextApiResponse | ServerResponse
@@ -67,11 +68,10 @@ export const getHttpOnlyRefreshTokenCookie = (
 		res
 	});
 
-	if (!tokenJsonB64) {
+	if (typeof tokenJsonB64 === 'boolean' || !tokenJsonB64) {
 		return false;
 	}
-
-	return decodeBase64(tokenJsonB64 as string);
+	return decodeBase64(tokenJsonB64);
 };
 
 export const setHttpOnlyRefreshTokenCookie = (
