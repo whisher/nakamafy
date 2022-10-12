@@ -16,7 +16,7 @@ const PlaylistTracks: React.FC<SearchSwitcherTrackProps> = ({ data }) => {
 		return null;
 	}
 	return (
-		<div className="mt-3 px-3">
+		<div data-testid="playlist-parent-items" className="mt-3 px-3">
 			<div className="flex items-center mt-4 pb-2 border-b border-white/10 text-xs text-white/60">
 				<div className="w-5/12">
 					<span className="inline-block text-center pr-3">#</span>

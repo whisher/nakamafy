@@ -7,7 +7,7 @@ import {
 	useGetPlaylistByIdQuery,
 	useSearchForPlaylistMutation,
 	useAddTrackToPlaylistMutation
-} from '@/hooks/query';
+} from '@/hooks/query/service';
 
 import { Alert } from '@/ui/alert';
 import { Loader } from '@/ui/loader';
@@ -15,10 +15,8 @@ import { PlaylistHeader } from './header';
 import { PlaylistSearchResult } from './search-result';
 import { PlaylistSearchForm } from './form';
 import { PlaylistTracks } from './tracks';
-const Playlist: React.FC = () => {
-	const { asPath } = useRouter();
-	const playlistId = asPath.split('/')[2];
-	const { data, isError } = useGetPlaylistByIdQuery(playlistId);
+const Playlist: React.FC<{ id: string }> = ({ id: playlistId }) => {
+	const { data: playlist, isError } = useGetPlaylistByIdQuery(playlistId);
 	const { data: me, isError: errorMe } = useGetMeQuery();
 	const [searchForPlaylist, { isSuccess, data: dataSearchResult }] = useSearchForPlaylistMutation();
 	const [addToPlaylist, { isSuccess: isSuccessAdded }] = useAddTrackToPlaylistMutation();
@@ -31,17 +29,18 @@ const Playlist: React.FC = () => {
 	const addToPlaylistHandler = (uri: string) => {
 		addToPlaylist({ playlistId, uri });
 	};
+
 	return (
 		<>
-			{me && data ? (
+			{playlist && me ? (
 				<div className="h-full bg-[#121212]">
-					<PlaylistHeader data={data} me={me} />
+					<PlaylistHeader data={playlist} me={me} />
 					<div className="flex flex-col px-6 pt-6 bg-gradient-to-b from-[#212121] to-[#121212]">
 						<div className="flex items-center gap-3">
 							<button
 								type="button"
 								className={`h-12 w-12 flex justify-center items-center rounded-full bg-brand-300 ${
-									data.tracks.total > 0 ? 'block' : 'hidden'
+									playlist.tracks.total > 0 ? 'block' : 'hidden'
 								}`}
 							>
 								<IoMdArrowDropdown className="h-12 w-12 -rotate-90 text-[#000000]" />
@@ -50,7 +49,7 @@ const Playlist: React.FC = () => {
 							<IoIosMore className="h-10 w-10 text-white/50" />
 						</div>
 
-						<PlaylistTracks data={data.tracks} />
+						<PlaylistTracks data={playlist.tracks} />
 						<div className="mt-6 mb-16 border-t border-white/50">
 							<h2 className="my-6 text-xl font-bold text-white ">
 								Let&#39;s find something for your playlist

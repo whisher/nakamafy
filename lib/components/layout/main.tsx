@@ -1,10 +1,10 @@
 import React, { ReactNode } from 'react';
 import { useRouter } from 'next/router';
-import { ApiProvider } from '@reduxjs/toolkit/query/react';
-
-import { queryApi } from '../../hooks/query';
+//import { ApiProvider } from '@reduxjs/toolkit/query/react';
+import { Provider } from 'react-redux';
+import { setupStore } from '@/hooks/query/store';
 import { Nav } from './nav';
-
+const store = setupStore();
 export interface LayoutProps {
 	children: ReactNode;
 }
@@ -17,14 +17,14 @@ const Main = ({ children }: LayoutProps) => {
 		return <>{children}</>;
 	}
 	return (
-		<ApiProvider api={queryApi}>
+		<Provider store={store}>
 			<div className="flex">
 				<div className="w-56 fixed top-0 min-h-screen bg-[#000000]">
 					<Nav pathname={router.pathname} />
 				</div>
 				<main className="min-h-screen ml-56 flex-1">{children}</main>
 			</div>
-		</ApiProvider>
+		</Provider>
 	);
 };
 

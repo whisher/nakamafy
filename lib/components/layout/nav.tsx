@@ -5,7 +5,11 @@ import { FaSpotify } from 'react-icons/fa';
 import { TiHeart } from 'react-icons/ti';
 import { BsPlus } from 'react-icons/bs';
 
-import { useGetMeQuery, useGetPlaylistsQuery, useCreatePlaylistMutation } from '../../hooks/query';
+import {
+	useGetMeQuery,
+	useGetPlaylistsQuery,
+	useCreatePlaylistMutation
+} from '@/hooks/query/service';
 import { Menu } from './menu';
 
 import { APP_TITLE, ROUTES } from '../../constant';

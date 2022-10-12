@@ -7,7 +7,7 @@ import {
 	useGetMeTopArtistsQuery,
 	useGetMeTopTracksQuery,
 	useGetPlaylistsQuery
-} from '@/hooks/query';
+} from '@/hooks/query/service';
 import { Alert } from '@/ui/alert';
 import { Loader } from '@/ui/loader';
 import { Spacer } from '@/ui/spacer';
