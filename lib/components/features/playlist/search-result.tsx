@@ -20,7 +20,10 @@ const PlaylistSearchResult: React.FC<PlaylistSearchResultProps> = ({
 			<article>
 				<>
 					{data && data.length > 0 ? (
-						<ul className="group flex flex-col gap-3 mt-6">
+						<ul
+							data-testid="playlist-result-parent-items"
+							className="group flex flex-col gap-3 mt-6"
+						>
 							{data.map(({ album, artists, id, name, uri }, i) => (
 								<li className="flex items-center hover:bg-[#2a2a2a]" key={id}>
 									<div className="w-7/12 flex items-center">

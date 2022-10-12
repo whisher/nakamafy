@@ -22,7 +22,12 @@ const Account: React.FC<AccountProps> = ({ data }) => {
 						) : (
 							<FaUser className="h-5 w-5 text-white/80" />
 						)}
-						<span className="flex-1 pl-2 pr-1 text-sm font-medium text-white">{display_name}</span>
+						<span
+							data-testid="user-account"
+							className="flex-1 pl-2 pr-1 text-sm font-medium text-white"
+						>
+							{display_name}
+						</span>
 						<IoMdArrowDropdown
 							className={`h-5 w-5 text-white transition ${open ? 'rotate-180' : 'rotate-0'}`}
 						/>
