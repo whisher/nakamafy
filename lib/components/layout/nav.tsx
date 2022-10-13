@@ -29,7 +29,7 @@ const Nav = ({ pathname }: NavProps) => {
 	const handleCreatePlaylist = () => {
 		if (me) {
 			const items = playlists?.items;
-			const currentNum: number = items && items.length > 0 ? items.length : 0;
+			const currentNum: number = items && items.length > 0 ? items.length + 1 : 1;
 			const userId = me.id;
 			createPlaylist({ userId, currentNum });
 		}

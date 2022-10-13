@@ -32,17 +32,6 @@ const SpotifyApi = async (req: NextApiRequest, res: NextApiResponse<unknown>) =>
 		if (!strB64) {
 			throw new Error('Invalid spotify api token');
 		}
-		const isExpired = hasTokenExpired(strB64);
-		if (isExpired) {
-			const result = await refreshToken(req, res);
-			if (!result) {
-				throw new Error('Invalid spotify refresh token');
-			}
-			strB64 = getHttpOnlyTokenCookie(req, res);
-			if (!strB64) {
-				throw new Error('Invalid spotify refresh token');
-			}
-		}
 		const tokenJson = decodeBase64(strB64);
 		const token = JSON.parse(tokenJson) as TokenDto;
 		const { access_token } = token;

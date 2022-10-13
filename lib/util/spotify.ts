@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import type { AxiosResponse } from 'axios';
+import type { NextRequest as NextServerRequest, NextResponse } from 'next/server';
 import axios from 'axios';
 import { IncomingMessage, ServerResponse } from 'http';
 import { deleteCookie, getCookie, setCookie } from 'cookies-next';
@@ -24,10 +25,16 @@ export interface TokenDto {
 	scope: string;
 	timestamp?: number;
 }
-
+type CookieOptions = boolean | 'none' | 'lax' | 'strict' | undefined;
 const COOKIE_SECURE = process.env.NODE_ENV === 'production' ? true : false;
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 30;
-const COOKIE_SAME_SITE = 'none';
+const COOKIE_SAME_SITE = 'lax' as CookieOptions;
+export const COOKIE_OPTIONS = {
+	maxAge: COOKIE_MAX_AGE,
+	secure: COOKIE_SECURE,
+	httpOnly: true,
+	sameSite: COOKIE_SAME_SITE
+};
 export type NextRequest = IncomingMessage & {
 	cookies?: { [key: string]: string } | Partial<{ [key: string]: string }>;
 };
@@ -74,22 +81,33 @@ export const getHttpOnlyRefreshTokenCookie = (
 	return decodeBase64(tokenJsonB64);
 };
 
+export const getMiddlewareHttpOnlyRefreshTokenCookie = (
+	request: NextServerRequest
+): string | undefined => {
+	const refreshToken = request.cookies.get(COOKIE_SPOTIFY_REFRESH_TOKEN_KEY);
+	return refreshToken ? decodeBase64(refreshToken) : refreshToken;
+};
+
 export const setHttpOnlyRefreshTokenCookie = (
 	token: string,
 	req: NextApiRequest | NextRequest,
 	res: NextApiResponse | ServerResponse
 ): void => {
-	const refreshTokenB64 = Buffer.from(token).toString('base64');
+	const refreshTokenB64 = encodeBase64(token);
 	setCookie(COOKIE_SPOTIFY_REFRESH_TOKEN_KEY, refreshTokenB64, {
 		req,
 		res,
-		maxAge: COOKIE_MAX_AGE,
-		secure: COOKIE_SECURE,
-		httpOnly: true,
-		sameSite: COOKIE_SAME_SITE
+		...COOKIE_OPTIONS
 	});
 };
 
+export const setMiddlewareHttpOnlyRefreshTokenCookie = (
+	token: string,
+	response: NextResponse
+): void => {
+	const refreshTokenB64 = encodeBase64(token);
+	response.cookies.set(COOKIE_SPOTIFY_REFRESH_TOKEN_KEY, refreshTokenB64, COOKIE_OPTIONS);
+};
 export const getHttpOnlyTokenCookie = (
 	req: NextApiRequest | NextRequest,
 	res: NextApiResponse | ServerResponse
@@ -102,6 +120,12 @@ export const getHttpOnlyTokenCookie = (
 		return false;
 	}
 	return strB64;
+};
+
+export const getMiddlewareHttpOnlyTokenCookie = (
+	request: NextServerRequest
+): string | undefined => {
+	return request.cookies.get(COOKIE_SPOTIFY_TOKEN_KEY);
 };
 
 export const setHttpOnlyTokenCookie = (
@@ -121,14 +145,24 @@ export const setHttpOnlyTokenCookie = (
 	setCookie(COOKIE_SPOTIFY_TOKEN_KEY, tokenJsonB64, {
 		req,
 		res,
-		maxAge: COOKIE_MAX_AGE,
-		secure: COOKIE_SECURE,
-		httpOnly: true,
-		sameSite: COOKIE_SAME_SITE
+		...COOKIE_OPTIONS
 	});
 };
 
-export const hasTokenExpired = (strB64: string | false): boolean | undefined => {
+export const setMiddlewareHttpOnlyTokenCookie = (token: TokenDto, response: NextResponse): void => {
+	if ('refresh_token' in token) {
+		const { refresh_token } = token;
+		if (refresh_token !== undefined) {
+			setMiddlewareHttpOnlyRefreshTokenCookie(refresh_token, response);
+		}
+	}
+	token.timestamp = Date.now(); //  - 1000 * 60 refresh token one minute before expired
+	let tokenJsonStr = JSON.stringify(token);
+	let tokenJsonB64 = encodeBase64(tokenJsonStr);
+	response.cookies.set(COOKIE_SPOTIFY_TOKEN_KEY, tokenJsonB64, COOKIE_OPTIONS);
+};
+
+export const hasTokenExpired = (strB64: string | false | undefined): boolean | undefined => {
 	if (!strB64) {
 		return undefined;
 	}
@@ -180,6 +214,22 @@ export const refreshToken = async (
 	}
 };
 
+export const middlewareRefreshToken = async (
+	request: NextServerRequest,
+	response: NextResponse
+): Promise<AxiosResponse<any, any>> => {
+	const refresh_token = getMiddlewareHttpOnlyRefreshTokenCookie(request);
+
+	if (!refresh_token) {
+		throw new Error('Invalid api refresh token');
+	}
+	const result = await getRefreshToken(refresh_token);
+	if ('data' in result) {
+		const newToken = result.data as TokenDto;
+		setMiddlewareHttpOnlyTokenCookie(newToken, response);
+	}
+	return result;
+};
 export const isAuthenticate = async (
 	req: NextApiRequest | NextRequest,
 	res: NextApiResponse | ServerResponse

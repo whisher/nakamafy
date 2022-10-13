@@ -40,7 +40,7 @@ export const queryApi = createApi({
 				body: {
 					name: `My Playlist #${currentNum}`,
 					description: 'New playlist description',
-					public: false
+					public: true
 				}
 			}),
 			invalidatesTags: ['Playlist']
