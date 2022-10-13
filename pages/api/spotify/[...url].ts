@@ -29,6 +29,7 @@ const SpotifyApi = async (req: NextApiRequest, res: NextApiResponse<unknown>) =>
 	try {
 		const currentUrl = buildUrl(url, params);
 		let strB64 = getHttpOnlyTokenCookie(req, res);
+		//console.log('token', strB64);
 		if (!strB64) {
 			throw new Error('Invalid spotify api token');
 		}

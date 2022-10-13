@@ -10,18 +10,23 @@ import {
 export function middleware(request: NextRequest, event: NextFetchEvent) {
 	const token = getMiddlewareHttpOnlyTokenCookie(request);
 	const currentPath = request.nextUrl.pathname;
-	console.log(currentPath);
+
 	const response = NextResponse.next();
 	if (!token) {
 		if (currentPath !== '/') {
-			return NextResponse.redirect(new URL('/', request.url));
+			return NextResponse.rewrite(new URL('/', request.url));
 		}
 	}
 	const isExpired = hasTokenExpired(token);
+
 	if (isExpired) {
 		event.waitUntil(middlewareRefreshToken(request, response));
 		if (currentPath === '/') {
-			return NextResponse.redirect(new URL('/profile', request.url));
+			return NextResponse.rewrite(new URL('/profile', request.url));
+		}
+	} else {
+		if (currentPath === '/') {
+			return NextResponse.rewrite(new URL('/profile', request.url));
 		}
 	}
 	return response;
