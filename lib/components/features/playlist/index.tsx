@@ -29,10 +29,9 @@ const Playlist: React.FC<{ id: string }> = ({ id: playlistId }) => {
 	const addToPlaylistHandler = (uri: string) => {
 		addToPlaylist({ playlistId, uri });
 	};
-
 	return (
 		<>
-			{playlist && me ? (
+			{me && playlist ? (
 				<div className="h-full bg-[#121212]">
 					<PlaylistHeader data={playlist} me={me} />
 					<div className="flex flex-col px-6 pt-6 bg-gradient-to-b from-[#212121] to-[#121212]">

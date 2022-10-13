@@ -1,10 +1,7 @@
-import 'whatwg-fetch';
 import { screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-
 import { server } from '../../_msw';
 import { renderWithProviders } from '../../_msw/test-utils';
-
 import Playlist from '../../pages/playlist/[id]';
 
 describe('Profile', () => {
