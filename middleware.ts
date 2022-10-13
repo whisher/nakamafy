@@ -20,6 +20,9 @@ export function middleware(request: NextRequest, event: NextFetchEvent) {
 	const isExpired = hasTokenExpired(token);
 	if (isExpired) {
 		event.waitUntil(middlewareRefreshToken(request, response));
+		if (currentPath === '/') {
+			return NextResponse.redirect(new URL('/profile', request.url));
+		}
 	}
 	return response;
 }
