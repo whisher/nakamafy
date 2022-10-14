@@ -6,8 +6,8 @@ import {
 	hasTokenExpired,
 	middlewareRefreshToken
 } from '@/util/spotify';
-// ,,
-export function middleware(request: NextRequest, event: NextFetchEvent) {
+
+export async function middleware(request: NextRequest, event: NextFetchEvent) {
 	const token = getMiddlewareHttpOnlyTokenCookie(request);
 	const currentPath = request.nextUrl.pathname;
 
@@ -17,6 +17,7 @@ export function middleware(request: NextRequest, event: NextFetchEvent) {
 			return NextResponse.rewrite(new URL('/', request.url));
 		}
 	}
+
 	const isExpired = hasTokenExpired(token);
 
 	if (isExpired) {
@@ -29,6 +30,7 @@ export function middleware(request: NextRequest, event: NextFetchEvent) {
 			return NextResponse.rewrite(new URL('/profile', request.url));
 		}
 	}
+
 	return response;
 }
 

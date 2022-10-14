@@ -9,7 +9,10 @@ import type {
 import type { PlaylistBaseObject, PlaylistObjectFull, SearchDto } from '@/types/search';
 //
 export const queryApi = createApi({
-	baseQuery: fetchBaseQuery({ baseUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/api/spotify/` }),
+	baseQuery: fetchBaseQuery({
+		baseUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/api/spotify/`,
+		credentials: 'include'
+	}),
 	tagTypes: ['Playlist'],
 	refetchOnFocus: true,
 	endpoints: (builder) => ({

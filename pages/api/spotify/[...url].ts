@@ -29,13 +29,14 @@ const SpotifyApi = async (req: NextApiRequest, res: NextApiResponse<unknown>) =>
 	try {
 		const currentUrl = buildUrl(url, params);
 		let strB64 = getHttpOnlyTokenCookie(req, res);
-		//console.log('token', strB64);
+
 		if (!strB64) {
 			throw new Error('Invalid spotify api token');
 		}
 		const tokenJson = decodeBase64(strB64);
 		const token = JSON.parse(tokenJson) as TokenDto;
 		const { access_token } = token;
+
 		if (req.method === 'POST') {
 			const result = await axios.post(currentUrl, req.body, {
 				headers: {

@@ -25,7 +25,13 @@ export interface TokenDto {
 	scope: string;
 	timestamp?: number;
 }
+
+export type NextRequest = IncomingMessage & {
+	cookies?: { [key: string]: string } | Partial<{ [key: string]: string }>;
+};
+
 type CookieOptions = boolean | 'none' | 'lax' | 'strict' | undefined;
+
 const COOKIE_SECURE = process.env.NODE_ENV === 'production' ? true : false;
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 30;
 const COOKIE_SAME_SITE = 'lax' as CookieOptions;
@@ -35,10 +41,6 @@ export const COOKIE_OPTIONS = {
 	httpOnly: true,
 	sameSite: COOKIE_SAME_SITE
 };
-export type NextRequest = IncomingMessage & {
-	cookies?: { [key: string]: string } | Partial<{ [key: string]: string }>;
-};
-
 export const decodeBase64 = (strB64: string): string => {
 	return Buffer.from(strB64, 'base64').toString('ascii');
 };
@@ -63,6 +65,24 @@ export const getRefreshToken = async (refreshToken: string): Promise<AxiosRespon
 			'content-type': 'application/x-www-form-urlencoded',
 			Authorization: `Basic ${buffer}`
 		}
+	});
+};
+
+export const getMiddlewareRefreshToken = async (refreshToken: string) => {
+	const buffer = Buffer.from(`${String(CLIENT_ID)}:${String(CLIENT_SECRET)}`).toString('base64');
+	const params: Record<DataParamName, string> = {
+		grant_type: 'refresh_token',
+		refresh_token: String(refreshToken)
+	};
+
+	const data = new URLSearchParams(params);
+	return await fetch('https://accounts.spotify.com/api/token', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/x-www-form-urlencoded',
+			Authorization: `Basic ${buffer}`
+		},
+		body: data
 	});
 };
 
@@ -217,17 +237,17 @@ export const refreshToken = async (
 export const middlewareRefreshToken = async (
 	request: NextServerRequest,
 	response: NextResponse
-): Promise<AxiosResponse<any, any>> => {
+) => {
 	const refresh_token = getMiddlewareHttpOnlyRefreshTokenCookie(request);
 
 	if (!refresh_token) {
 		throw new Error('Invalid api refresh token');
 	}
-	const result = await getRefreshToken(refresh_token);
-	if ('data' in result) {
-		const newToken = result.data as TokenDto;
-		setMiddlewareHttpOnlyTokenCookie(newToken, response);
-	}
+	const result = await getMiddlewareRefreshToken(refresh_token);
+	const data = await result.json();
+
+	const newToken = data as TokenDto;
+	setMiddlewareHttpOnlyTokenCookie(newToken, response);
 	return result;
 };
 export const isAuthenticate = async (
