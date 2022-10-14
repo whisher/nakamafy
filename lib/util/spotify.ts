@@ -241,9 +241,12 @@ export const middlewareRefreshToken = async (
 	const refresh_token = getMiddlewareHttpOnlyRefreshTokenCookie(request);
 
 	if (!refresh_token) {
-		throw new Error('Invalid api refresh token');
+		throw new Error('Invalid refresh token');
 	}
 	const result = await getMiddlewareRefreshToken(refresh_token);
+	if (!result.ok) {
+		throw new Error('Problem to refresh the token');
+	}
 	const data = await result.json();
 
 	const newToken = data as TokenDto;
