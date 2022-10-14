@@ -69,7 +69,7 @@ export const getRefreshToken = async (refreshToken: string): Promise<AxiosRespon
 };
 
 export const getMiddlewareRefreshToken = async (refreshToken: string) => {
-	const buffer = Buffer.from(`${String(CLIENT_ID)}:${String(CLIENT_SECRET)}`).toString('base64');
+	const buffer = encodeBase64(`${String(CLIENT_ID)}:${String(CLIENT_SECRET)}`);
 	const params: Record<DataParamName, string> = {
 		grant_type: 'refresh_token',
 		refresh_token: String(refreshToken)
