@@ -7,7 +7,7 @@ import {
 	useGetMeTopArtistsQuery,
 	useGetMeTopTracksQuery,
 	useGetPlaylistsQuery
-} from '@/hooks/query/service';
+} from '@/hooks/rq';
 import { Alert } from '@/ui/alert';
 import { Loader } from '@/ui/loader';
 import { Spacer } from '@/ui/spacer';
@@ -21,37 +21,64 @@ const Profile: React.FC = () => {
 	const [apiTracksQueryParams, setApiTracksQueryParams] = useState<string>(
 		'?time_range=short_term&limit=10&offset=0'
 	);
-	const { data: me, error: errorMe } = useGetMeQuery();
-	const { data: meFollowing, error: errorFollowing } = useGetMeFollowingArtistQuery();
-	const { data: meTopArtists, error: errorTopArtists } = useGetMeTopArtistsQuery();
-	const { data: meTopTracks, error: errorTopTracks } = useGetMeTopTracksQuery(apiTracksQueryParams);
-	const { data: mePlaylists, error: errorPlaylists } = useGetPlaylistsQuery();
+	const { data: me, isError: isErrorMe, isLoading: isLoadingMe } = useGetMeQuery();
+	const {
+		data: meFollowing,
+		isError: isErrorMeFollowing,
+		isLoading: isLoadingMeFollowing
+	} = useGetMeFollowingArtistQuery();
+	const {
+		data: meTopArtists,
+		isError: isErrorMeTopArtists,
+		isLoading: isLoadingMeTopArtists
+	} = useGetMeTopArtistsQuery();
+	const {
+		data: meTopTracks,
+		isError: isErrorMeTopTracks,
+		isLoading: isLoadingMeTopTracks
+	} = useGetMeTopTracksQuery(apiTracksQueryParams);
+	const {
+		data: mePlaylists,
+		isError: isErrorMePlaylists,
+		isLoading: isLoadingMePlaylists
+	} = useGetPlaylistsQuery();
 
-	if (errorMe || errorFollowing || errorTopArtists || errorTopTracks || errorPlaylists) {
+	if (
+		isLoadingMe ||
+		isLoadingMeFollowing ||
+		isLoadingMeTopArtists ||
+		isLoadingMeTopTracks ||
+		isLoadingMePlaylists
+	) {
+		return <Loader />;
+	}
+
+	if (
+		isErrorMe ||
+		isErrorMeFollowing ||
+		isErrorMeTopArtists ||
+		isErrorMeTopTracks ||
+		isErrorMePlaylists
+	) {
 		return <Alert />;
 	}
+	console.log(meFollowing);
 	return (
 		<>
-			{me && meFollowing && meTopArtists && meTopTracks && mePlaylists ? (
-				<>
-					<ProfileHeader me={me} meFollowing={meFollowing} mePlaylists={mePlaylists} />
-					<div className="flex flex-col pb-9 bg-gradient-to-b from-[#454e5d] via-[#212121] to-gray-600">
-						<Spacer>
-							<IoIosMore className="h-12 w-12 -ml-3 py-3 text-white/50" />
-							<ProfileTopArtists data={meTopArtists} />
-							<ProfileTopTracks
-								data={meTopTracks}
-								apiTracksQueryParams={apiTracksQueryParams}
-								setApiTracksQueryParams={setApiTracksQueryParams}
-							/>
-							<ProfilePlaylists data={mePlaylists} />
-							<ProfileFollowing data={meFollowing} />
-						</Spacer>
-					</div>
-				</>
-			) : (
-				<Loader />
-			)}
+			<ProfileHeader me={me} meFollowing={meFollowing} mePlaylists={mePlaylists} />
+			<div className="flex flex-col pb-9 bg-gradient-to-b from-[#454e5d] via-[#212121] to-gray-600">
+				<Spacer>
+					<IoIosMore className="h-12 w-12 -ml-3 py-3 text-white/50" />
+					<ProfileTopArtists data={meTopArtists} />
+					<ProfileTopTracks
+						data={meTopTracks}
+						apiTracksQueryParams={apiTracksQueryParams}
+						setApiTracksQueryParams={setApiTracksQueryParams}
+					/>
+					<ProfilePlaylists data={mePlaylists} />
+					<ProfileFollowing data={meFollowing} />
+				</Spacer>
+			</div>
 		</>
 	);
 };

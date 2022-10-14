@@ -1,10 +1,11 @@
 import React, { ReactNode } from 'react';
 import { useRouter } from 'next/router';
-//import { ApiProvider } from '@reduxjs/toolkit/query/react';
-import { Provider } from 'react-redux';
-import { setupStore } from '@/hooks/query/store';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Nav } from './nav';
-const store = setupStore();
+
+const queryClient = new QueryClient();
+
 export interface LayoutProps {
 	children: ReactNode;
 }
@@ -17,14 +18,15 @@ const Main = ({ children }: LayoutProps) => {
 		return <>{children}</>;
 	}
 	return (
-		<Provider store={store}>
+		<QueryClientProvider client={queryClient}>
 			<div className="flex">
 				<div className="w-56 fixed top-0 min-h-screen bg-[#000000]">
 					<Nav pathname={router.pathname} />
 				</div>
 				<main className="min-h-screen ml-56 flex-1">{children}</main>
 			</div>
-		</Provider>
+			<ReactQueryDevtools initialIsOpen={true} />
+		</QueryClientProvider>
 	);
 };
 

@@ -21,18 +21,18 @@ export interface NavProps {
 const Nav = ({ pathname }: NavProps) => {
 	const { asPath } = useRouter();
 	const playlistId = asPath.includes('playlist') ? asPath.split('/')[2] : undefined;
-	const { data: me } = useGetMeQuery();
-	const { data: playlists } = useGetPlaylistsQuery();
-	const [createPlaylist, { isLoading: isUpdating }] = useCreatePlaylistMutation();
-
+	//const { data: me } = useGetMeQuery();
+	//const { data: playlists } = useGetPlaylistsQuery();
+	//const [createPlaylist, { isLoading: isUpdating }] = useCreatePlaylistMutation();
+	const playlists = false;
 	const { profile } = ROUTES;
 	const handleCreatePlaylist = () => {
-		if (me) {
+		/*if (me) {
 			const items = playlists?.items;
 			const currentNum: number = items && items.length > 0 ? items.length : 0;
 			const userId = me.id;
 			createPlaylist({ userId, currentNum });
-		}
+		}*/
 	};
 	return (
 		<div className="mx-6 pt-6">
@@ -74,7 +74,7 @@ const Nav = ({ pathname }: NavProps) => {
 			</ul>
 			{playlists ? (
 				<ul className="flex flex-col gap-2 mt-3 overflow-auto">
-					{playlists.items.map(({ id, name }) => (
+					{/*playlists.items.map(({ id, name }) => (
 						<li key={id} className="">
 							<Link href={`/playlist/${id}`}>
 								<a
@@ -86,7 +86,7 @@ const Nav = ({ pathname }: NavProps) => {
 								</a>
 							</Link>
 						</li>
-					))}
+								))*/}
 				</ul>
 			) : null}
 		</div>
