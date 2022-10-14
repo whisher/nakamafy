@@ -20,15 +20,17 @@ const Playlist: React.FC<{ id: string }> = ({ id: playlistId }) => {
 	const { data: me, isError: errorMe } = useGetMeQuery();
 	const [searchForPlaylist, { isSuccess, data: dataSearchResult }] = useSearchForPlaylistMutation();
 	const [addToPlaylist, { isSuccess: isSuccessAdded }] = useAddTrackToPlaylistMutation();
-	if (isError || errorMe) {
-		return <Alert />;
-	}
 	const searchHandler = (query: string) => {
 		searchForPlaylist(query);
 	};
 	const addToPlaylistHandler = (uri: string) => {
 		addToPlaylist({ playlistId, uri });
 	};
+
+	if (isError || errorMe) {
+		return <Alert />;
+	}
+
 	return (
 		<>
 			{me && playlist ? (
