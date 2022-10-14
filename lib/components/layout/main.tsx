@@ -25,7 +25,7 @@ const Main = ({ children }: LayoutProps) => {
 				</div>
 				<main className="min-h-screen ml-56 flex-1">{children}</main>
 			</div>
-			<ReactQueryDevtools initialIsOpen={true} />
+			<ReactQueryDevtools initialIsOpen={false} />
 		</QueryClientProvider>
 	);
 };

@@ -50,10 +50,14 @@ const useGetPlaylistsQuery = () => {
 	return useQuery(['me-playlist'], fetcher<MePlaylistDto>('me/playlists'));
 };
 
+const useGetPlaylistByIdQuery = (id: string) => {
+	return useQuery(['playlist-by-id'], fetcher<PlaylistObjectFull>(`/playlists/${id}`));
+};
 export {
 	useGetMeQuery,
 	useGetMeFollowingArtistQuery,
 	useGetMeTopArtistsQuery,
 	useGetMeTopTracksQuery,
-	useGetPlaylistsQuery
+	useGetPlaylistsQuery,
+	useGetPlaylistByIdQuery
 };
