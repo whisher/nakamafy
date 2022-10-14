@@ -159,7 +159,7 @@ export const setHttpOnlyTokenCookie = (
 			setHttpOnlyRefreshTokenCookie(refresh_token, req, res);
 		}
 	}
-	token.timestamp = Date.now(); //  - 1000 * 60 refresh token one minute before expired
+	token.timestamp = Date.now();
 	let tokenJsonStr = JSON.stringify(token);
 	let tokenJsonB64 = encodeBase64(tokenJsonStr);
 	setCookie(COOKIE_SPOTIFY_TOKEN_KEY, tokenJsonB64, {
