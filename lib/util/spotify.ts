@@ -40,7 +40,7 @@ export const encodeBase64 = (str: string): string => {
 };
 
 export const getRefreshToken = async (refreshToken: string): Promise<AxiosResponse<any, any>> => {
-	const buffer = Buffer.from(`${String(CLIENT_ID)}:${String(CLIENT_SECRET)}`).toString('base64');
+	const buffer = encodeBase64(`${String(CLIENT_ID)}:${String(CLIENT_SECRET)}`);
 	const params: Record<DataParamName, string> = {
 		grant_type: 'refresh_token',
 		refresh_token: String(refreshToken)
@@ -79,7 +79,7 @@ export const setHttpOnlyRefreshTokenCookie = (
 	req: NextApiRequest | NextRequest,
 	res: NextApiResponse | ServerResponse
 ): void => {
-	const refreshTokenB64 = Buffer.from(token).toString('base64');
+	const refreshTokenB64 = encodeBase64(token);
 	setCookie(COOKIE_SPOTIFY_REFRESH_TOKEN_KEY, refreshTokenB64, {
 		req,
 		res,
