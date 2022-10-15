@@ -1,11 +1,9 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-
-const queryClient = new QueryClient();
-import { screen, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { server } from '../../_msw';
-import { renderWithProviders } from '../../_msw/test-utils';
+
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+const queryClient = new QueryClient();
+
 import Playlist from '../../pages/playlist/[id]';
 
 describe('Profile', () => {
@@ -14,9 +12,11 @@ describe('Profile', () => {
 	afterEach(() => server.resetHandlers());
 
 	it('handles good response', async () => {
-		<QueryClientProvider client={queryClient}>
-			<Playlist id="abcd" />)
-		</QueryClientProvider>;
+		render(
+			<QueryClientProvider client={queryClient}>
+				<Playlist id="abcd" />)
+			</QueryClientProvider>
+		);
 		const loader = screen.getByTestId('is-loading');
 		expect(loader).toBeInstanceOf(HTMLElement);
 		const account = await screen.findByTestId('user-account');
@@ -35,6 +35,10 @@ describe('Profile', () => {
 			.querySelector('li')
 			?.querySelector('button') as HTMLButtonElement;
 		fireEvent.click(addButton);
+		// Todo
+		//const playlistParentItems = await screen.findByTestId('playlist-parent-items');
+		//expect(playlistParentItems).toBeInstanceOf(HTMLElement);
+		//expect(playlistParentItems.children).toHaveLength(1);
 	});
 });
 

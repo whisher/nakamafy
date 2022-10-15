@@ -2,9 +2,6 @@ import React from 'react';
 import type { TrackObjectFull } from '@/types/search';
 
 import Image from 'next/image';
-import { IoMdArrowDropdown } from 'react-icons/io';
-import { IoTimeOutline } from 'react-icons/io5';
-import { formatDuration } from '@/util/moment';
 
 export interface PlaylistSearchResultProps {
 	data: TrackObjectFull[] | undefined;

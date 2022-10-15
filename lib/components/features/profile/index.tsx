@@ -7,7 +7,7 @@ import {
 	useGetMeTopArtistsQuery,
 	useGetMeTopTracksQuery,
 	useGetMePlaylistsQuery
-} from '@/hooks/rq';
+} from '@/hooks/query';
 import { Alert } from '@/ui/alert';
 import { Loader } from '@/ui/loader';
 import { Spacer } from '@/ui/spacer';
@@ -62,7 +62,6 @@ const Profile: React.FC = () => {
 	) {
 		return <Alert />;
 	}
-	console.log(meFollowing);
 	return (
 		<>
 			<ProfileHeader me={me} meFollowing={meFollowing} mePlaylists={mePlaylists} />

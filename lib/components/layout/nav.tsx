@@ -5,7 +5,7 @@ import { FaSpotify } from 'react-icons/fa';
 import { TiHeart } from 'react-icons/ti';
 import { BsPlus } from 'react-icons/bs';
 
-import { useGetMeQuery, useGetMePlaylistsQuery, useCreatePlaylistMutation } from '@/hooks/rq';
+import { useGetMeQuery, useGetMePlaylistsQuery, useCreatePlaylistMutation } from '@/hooks/query';
 import { Menu } from './menu';
 
 import { APP_TITLE, ROUTES } from '../../constant';
@@ -19,7 +19,7 @@ const Nav = ({ pathname }: NavProps) => {
 	const playlistId = asPath.includes('playlist') ? asPath.split('/')[2] : undefined;
 	const { data: me } = useGetMeQuery();
 	const { data: playlists } = useGetMePlaylistsQuery();
-	const mutation = useCreatePlaylistMutation();
+	const { mutateAsync } = useCreatePlaylistMutation();
 
 	const { profile } = ROUTES;
 	const handleCreatePlaylist = async () => {
@@ -27,7 +27,7 @@ const Nav = ({ pathname }: NavProps) => {
 			const items = playlists?.items;
 			const currentNum: number = items && items.length > 0 ? items.length + 1 : 0;
 			const userId = me.id;
-			await mutation.mutateAsync({ userId, currentNum });
+			await mutateAsync({ userId, currentNum });
 		}
 	};
 	return (

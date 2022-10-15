@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useGetMeQuery, useSearchForQueryAndTypeQuery } from '@/hooks/rq';
+import { useGetMeQuery, useSearchForQueryAndTypeQuery } from '@/hooks/query';
 import { useSearch } from '@/hooks/search';
 
 import { Alert } from '@/ui/alert';

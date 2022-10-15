@@ -7,7 +7,7 @@ import {
 	useGetMePlaylistByIdQuery,
 	useSearchForTrackQuery,
 	useAddTrackToPlaylistMutation
-} from '@/hooks/rq';
+} from '@/hooks/query';
 
 import { Alert } from '@/ui/alert';
 import { Loader } from '@/ui/loader';
@@ -25,14 +25,13 @@ const Playlist: React.FC<{ id: string }> = ({ id: playlistId }) => {
 	const [query, setQuery] = useState('');
 	const { data: dataSearchResult } = useSearchForTrackQuery(query);
 
-	const mutation = useAddTrackToPlaylistMutation();
+	const { mutateAsync, isLoading } = useAddTrackToPlaylistMutation();
 	const searchHandler = (query: string) => {
 		setQuery(query);
 	};
 	const addToPlaylistHandler = async (uri: string) => {
-		await mutation.mutateAsync({ playlistId, uri });
+		await mutateAsync({ playlistId, uri });
 	};
-	console.log(isLoadingPlaylist, isLoadingMe);
 	if (isLoadingPlaylist || isLoadingMe) {
 		return (
 			<div className="pt-14">
@@ -43,7 +42,6 @@ const Playlist: React.FC<{ id: string }> = ({ id: playlistId }) => {
 	if (isErrorPlaylist || isErrorMe) {
 		return <Alert />;
 	}
-	console.log(dataSearchResult);
 	return (
 		<div className="h-full bg-[#121212]">
 			<PlaylistHeader data={playlist} me={me} />
