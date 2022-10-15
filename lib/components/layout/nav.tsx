@@ -22,12 +22,12 @@ const Nav = ({ pathname }: NavProps) => {
 	const mutation = useCreatePlaylistMutation();
 
 	const { profile } = ROUTES;
-	const handleCreatePlaylist = () => {
+	const handleCreatePlaylist = async () => {
 		if (me) {
 			const items = playlists?.items;
 			const currentNum: number = items && items.length > 0 ? items.length + 1 : 0;
 			const userId = me.id;
-			mutation.mutateAsync({ userId, currentNum });
+			await mutation.mutateAsync({ userId, currentNum });
 		}
 	};
 	return (

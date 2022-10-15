@@ -29,9 +29,10 @@ const Playlist: React.FC<{ id: string }> = ({ id: playlistId }) => {
 	const searchHandler = (query: string) => {
 		setQuery(query);
 	};
-	const addToPlaylistHandler = (uri: string) => {
-		mutation.mutateAsync({ playlistId, uri });
+	const addToPlaylistHandler = async (uri: string) => {
+		await mutation.mutateAsync({ playlistId, uri });
 	};
+	console.log(isLoadingPlaylist, isLoadingMe);
 	if (isLoadingPlaylist || isLoadingMe) {
 		return (
 			<div className="pt-14">

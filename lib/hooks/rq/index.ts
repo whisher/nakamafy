@@ -75,7 +75,7 @@ const useAddTrackToPlaylistMutation = () => {
 	};
 	return useMutation(addTrackFetcher, {
 		onSuccess: () => {
-			queryClient.invalidateQueries(['playlist-by-id']);
+			queryClient.invalidateQueries(['me-playlist-by-id']);
 		}
 	});
 };
