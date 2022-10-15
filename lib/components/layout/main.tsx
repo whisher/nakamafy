@@ -19,7 +19,7 @@ const Main = ({ children }: LayoutProps) => {
 	return (
 		<Provider store={store}>
 			<div className="flex">
-				<div className="w-56 fixed top-0 min-h-screen bg-[#000000]">
+				<div className="w-56 fixed top-0 bg-[#000000]">
 					<Nav pathname={router.pathname} />
 				</div>
 				<main className="min-h-screen ml-56 flex-1">{children}</main>

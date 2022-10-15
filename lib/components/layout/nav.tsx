@@ -35,7 +35,7 @@ const Nav = ({ pathname }: NavProps) => {
 		}
 	};
 	return (
-		<div className="mx-6 pt-6">
+		<div className="h-screen flex flex-col mx-6 pt-6">
 			<h1 className="mb-7">
 				<Link href={profile}>
 					<a className="flex items-center">
@@ -73,21 +73,23 @@ const Nav = ({ pathname }: NavProps) => {
 				</li>
 			</ul>
 			{playlists ? (
-				<ul className="flex flex-col gap-2 mt-3 overflow-auto">
-					{playlists.items.map(({ id, name }) => (
-						<li key={id} className="">
-							<Link href={`/playlist/${id}`}>
-								<a
-									className={`text-sm font-bold transition  hover:text-white cursor-default ${
-										playlistId === id ? 'text-white' : 'text-white/50'
-									}`}
-								>
-									{name}
-								</a>
-							</Link>
-						</li>
-					))}
-				</ul>
+				<div className="overflow-auto">
+					<ul className="flex flex-col gap-2 my-3">
+						{playlists.items.map(({ id, name }) => (
+							<li key={id} className="">
+								<Link href={`/playlist/${id}`}>
+									<a
+										className={`text-sm font-bold transition  hover:text-white cursor-default ${
+											playlistId === id ? 'text-white' : 'text-white/50'
+										}`}
+									>
+										{name}
+									</a>
+								</Link>
+							</li>
+						))}
+					</ul>
+				</div>
 			) : null}
 		</div>
 	);
