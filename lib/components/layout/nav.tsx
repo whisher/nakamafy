@@ -5,11 +5,7 @@ import { FaSpotify } from 'react-icons/fa';
 import { TiHeart } from 'react-icons/ti';
 import { BsPlus } from 'react-icons/bs';
 
-import {
-	useGetMeQuery,
-	useGetPlaylistsQuery,
-	useCreatePlaylistMutation
-} from '@/hooks/query/service';
+import { useGetMeQuery, useGetMePlaylistsQuery, useCreatePlaylistMutation } from '@/hooks/rq';
 import { Menu } from './menu';
 
 import { APP_TITLE, ROUTES } from '../../constant';
@@ -21,18 +17,18 @@ export interface NavProps {
 const Nav = ({ pathname }: NavProps) => {
 	const { asPath } = useRouter();
 	const playlistId = asPath.includes('playlist') ? asPath.split('/')[2] : undefined;
-	//const { data: me } = useGetMeQuery();
-	//const { data: playlists } = useGetPlaylistsQuery();
-	//const [createPlaylist, { isLoading: isUpdating }] = useCreatePlaylistMutation();
-	const playlists = false;
+	const { data: me } = useGetMeQuery();
+	const { data: playlists } = useGetMePlaylistsQuery();
+	const mutation = useCreatePlaylistMutation();
+
 	const { profile } = ROUTES;
 	const handleCreatePlaylist = () => {
-		/*if (me) {
+		if (me) {
 			const items = playlists?.items;
-			const currentNum: number = items && items.length > 0 ? items.length : 0;
+			const currentNum: number = items && items.length > 0 ? items.length + 1 : 0;
 			const userId = me.id;
-			createPlaylist({ userId, currentNum });
-		}*/
+			mutation.mutateAsync({ userId, currentNum });
+		}
 	};
 	return (
 		<div className="mx-6 pt-6">
@@ -74,7 +70,7 @@ const Nav = ({ pathname }: NavProps) => {
 			</ul>
 			{playlists ? (
 				<ul className="flex flex-col gap-2 mt-3 overflow-auto">
-					{/*playlists.items.map(({ id, name }) => (
+					{playlists.items.map(({ id, name }) => (
 						<li key={id} className="">
 							<Link href={`/playlist/${id}`}>
 								<a
@@ -86,7 +82,7 @@ const Nav = ({ pathname }: NavProps) => {
 								</a>
 							</Link>
 						</li>
-								))*/}
+					))}
 				</ul>
 			) : null}
 		</div>

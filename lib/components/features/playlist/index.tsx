@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
+
 import { IoIosMore, IoMdArrowDropdown } from 'react-icons/io';
 
 import {
 	useGetMeQuery,
-	useGetPlaylistByIdQuery
-	//useSearchForPlaylistMutation,
-	//useAddTrackToPlaylistMutation
+	useGetMePlaylistByIdQuery,
+	useSearchForTrackQuery,
+	useAddTrackToPlaylistMutation
 } from '@/hooks/rq';
 
 import { Alert } from '@/ui/alert';
@@ -19,15 +20,17 @@ const Playlist: React.FC<{ id: string }> = ({ id: playlistId }) => {
 		data: playlist,
 		isError: isErrorPlaylist,
 		isLoading: isLoadingPlaylist
-	} = useGetPlaylistByIdQuery(playlistId);
+	} = useGetMePlaylistByIdQuery(playlistId);
 	const { data: me, isError: isErrorMe, isLoading: isLoadingMe } = useGetMeQuery();
-	//const [searchForPlaylist, { isSuccess, data: dataSearchResult }] = useSearchForPlaylistMutation();
-	//const [addToPlaylist, { isSuccess: isSuccessAdded }] = useAddTrackToPlaylistMutation();
+	const [query, setQuery] = useState('');
+	const { data: dataSearchResult } = useSearchForTrackQuery(query);
+
+	const mutation = useAddTrackToPlaylistMutation();
 	const searchHandler = (query: string) => {
-		//searchForPlaylist(query);
+		setQuery(query);
 	};
 	const addToPlaylistHandler = (uri: string) => {
-		//addToPlaylist({ playlistId, uri });
+		mutation.mutateAsync({ playlistId, uri });
 	};
 	if (isLoadingPlaylist || isLoadingMe) {
 		return (
@@ -39,7 +42,7 @@ const Playlist: React.FC<{ id: string }> = ({ id: playlistId }) => {
 	if (isErrorPlaylist || isErrorMe) {
 		return <Alert />;
 	}
-
+	console.log(dataSearchResult);
 	return (
 		<div className="h-full bg-[#121212]">
 			<PlaylistHeader data={playlist} me={me} />
@@ -64,12 +67,12 @@ const Playlist: React.FC<{ id: string }> = ({ id: playlistId }) => {
 					</h2>
 					<PlaylistSearchForm searchHandler={searchHandler} />
 				</div>
-				{/*isSuccess && dataSearchResult && 'tracks' in dataSearchResult ? (
-							<PlaylistSearchResult
-								data={dataSearchResult.tracks.items}
-								addToPlaylistHandler={addToPlaylistHandler}
-							/>
-						) : null*/}
+				{dataSearchResult && 'tracks' in dataSearchResult ? (
+					<PlaylistSearchResult
+						data={dataSearchResult.tracks.items}
+						addToPlaylistHandler={addToPlaylistHandler}
+					/>
+				) : null}
 			</div>
 		</div>
 	);

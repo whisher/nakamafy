@@ -6,7 +6,7 @@ import {
 	useGetMeFollowingArtistQuery,
 	useGetMeTopArtistsQuery,
 	useGetMeTopTracksQuery,
-	useGetPlaylistsQuery
+	useGetMePlaylistsQuery
 } from '@/hooks/rq';
 import { Alert } from '@/ui/alert';
 import { Loader } from '@/ui/loader';
@@ -41,7 +41,7 @@ const Profile: React.FC = () => {
 		data: mePlaylists,
 		isError: isErrorMePlaylists,
 		isLoading: isLoadingMePlaylists
-	} = useGetPlaylistsQuery();
+	} = useGetMePlaylistsQuery();
 
 	if (
 		isLoadingMe ||
