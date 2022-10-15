@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useGetMeQuery, useSearchForQueryAndTypeQuery } from '@/hooks/query/service';
+import { useGetMeQuery, useSearchForQueryAndTypeQuery } from '@/hooks/rq';
 import { useSearch } from '@/hooks/search';
 
 import { Alert } from '@/ui/alert';
@@ -12,7 +12,7 @@ const Search: React.FC = () => {
 	const { getPath, state } = useSearch();
 	const path = getPath();
 	const { data: me, error: errorMe } = useGetMeQuery();
-	const { data: searchData, error: errorSearch } = useSearchForQueryAndTypeQuery(path);
+	const { data: searchData, isError: errorSearch } = useSearchForQueryAndTypeQuery(path);
 	if (errorMe) {
 		return <Alert />;
 	}

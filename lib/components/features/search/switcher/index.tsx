@@ -15,18 +15,11 @@ import { SearchSwitcherTrack } from './track';
 
 export interface SearchSwitcherProps {
 	data: SearchDto | undefined;
-	error: SerializedError | FetchBaseQueryError | undefined;
+	error: boolean;
 	type: MenuTypesDto | undefined;
 }
 
 const SearchSwitcher: React.FC<SearchSwitcherProps> = ({ data, error, type }) => {
-	if (error) {
-		return (
-			<div className="mt-14">
-				<Alert />
-			</div>
-		);
-	}
 	if (!data) {
 		return (
 			<div className="pt-14">
@@ -34,6 +27,14 @@ const SearchSwitcher: React.FC<SearchSwitcherProps> = ({ data, error, type }) =>
 			</div>
 		);
 	}
+	if (error) {
+		return (
+			<div className="mt-14">
+				<Alert />
+			</div>
+		);
+	}
+
 	switch (type) {
 		case 'album':
 			const albums = 'albums' in data ? data.albums.items : undefined;

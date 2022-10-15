@@ -1,3 +1,7 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+
+const queryClient = new QueryClient();
 import { screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { server } from '../../_msw';
@@ -10,7 +14,9 @@ describe('Profile', () => {
 	afterEach(() => server.resetHandlers());
 
 	it('handles good response', async () => {
-		renderWithProviders(<Playlist id="abcd" />);
+		<QueryClientProvider client={queryClient}>
+			<Playlist id="abcd" />)
+		</QueryClientProvider>;
 		const loader = screen.getByTestId('is-loading');
 		expect(loader).toBeInstanceOf(HTMLElement);
 		const account = await screen.findByTestId('user-account');

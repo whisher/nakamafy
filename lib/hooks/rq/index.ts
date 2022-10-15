@@ -64,6 +64,10 @@ const useSearchForTrackQuery = (query: string) => {
 	);
 };
 
+const useSearchForQueryAndTypeQuery = (path: string) => {
+	return useQuery(['search-for-type-and-query', path], fetcher<SearchDto>(`search${path}`));
+};
+
 const useAddTrackToPlaylistMutation = () => {
 	const queryClient = useQueryClient();
 	const addTrackFetcher = async (data: { playlistId: string; uri: string }) => {
@@ -100,6 +104,7 @@ export {
 	useGetMePlaylistsQuery,
 	useGetMePlaylistByIdQuery,
 	useSearchForTrackQuery,
+	useSearchForQueryAndTypeQuery,
 	useAddTrackToPlaylistMutation,
 	useCreatePlaylistMutation
 };
