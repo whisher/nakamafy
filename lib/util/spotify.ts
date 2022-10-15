@@ -27,7 +27,7 @@ export interface TokenDto {
 
 const COOKIE_SECURE = process.env.NODE_ENV === 'production' ? true : false;
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 30;
-const COOKIE_SAME_SITE = 'none';
+const COOKIE_SAME_SITE = 'lax';
 export type NextRequest = IncomingMessage & {
 	cookies?: { [key: string]: string } | Partial<{ [key: string]: string }>;
 };
