@@ -1,7 +1,7 @@
 import { screen, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom';
 import { server } from '../../_msw';
 import { renderWithProviders } from '../../_msw/test-utils';
+
 import Playlist from '../../pages/playlist/[id]';
 
 describe('Profile', () => {
@@ -29,6 +29,10 @@ describe('Profile', () => {
 			.querySelector('li')
 			?.querySelector('button') as HTMLButtonElement;
 		fireEvent.click(addButton);
+		// Todo
+		//const playlistParentItems = await screen.findByTestId('playlist-parent-items');
+		//expect(playlistParentItems).toBeInstanceOf(HTMLElement);
+		//expect(playlistParentItems.children).toHaveLength(1);
 	});
 });
 
