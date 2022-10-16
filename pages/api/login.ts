@@ -10,7 +10,7 @@ export const generateRandomString = (length: number): string => {
 	}
 	return text;
 };
-
+const COOKIE_SECURE = process.env.NODE_ENV === 'production' ? true : false;
 export type ParamName = 'client_id' | 'response_type' | 'redirect_uri' | 'state' | 'scope';
 
 const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
@@ -19,7 +19,14 @@ const scope = USER_SPOTIFY_SCOPE;
 
 const Login = (req: NextApiRequest, res: NextApiResponse<void>) => {
 	const state = generateRandomString(16);
-	setCookie(COOKIE_SPOTIFY_STATE_KEY, state, { req, res, maxAge: 60 * 60, httpOnly: true });
+	setCookie(COOKIE_SPOTIFY_STATE_KEY, state, {
+		req,
+		res,
+		maxAge: 60 * 60,
+		secure: COOKIE_SECURE,
+		httpOnly: true,
+		sameSite: 'lax'
+	});
 	const params: Record<ParamName, string> = {
 		client_id: String(CLIENT_ID),
 		response_type: 'code',
