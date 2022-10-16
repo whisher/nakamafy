@@ -116,7 +116,8 @@ export const setHttpOnlyTokenCookie = (
 		}
 	}
 	token.timestamp = Date.now(); //  - 1000 * 60 refresh token one minute before expired
-	let tokenJsonStr = JSON.stringify(token);
+	const { access_token, timestamp, expires_in } = token;
+	let tokenJsonStr = JSON.stringify({ access_token, timestamp, expires_in });
 	let tokenJsonB64 = encodeBase64(tokenJsonStr);
 	setCookie(COOKIE_SPOTIFY_TOKEN_KEY, tokenJsonB64, {
 		req,
@@ -133,7 +134,10 @@ export const hasTokenExpired = (strB64: string | false): boolean | undefined => 
 		return undefined;
 	}
 	const tokenJson = decodeBase64(strB64);
-	const token = JSON.parse(tokenJson) as TokenDto;
+	const token = JSON.parse(tokenJson) as Pick<
+		TokenDto,
+		'access_token' | 'timestamp' | 'expires_in'
+	>;
 	const { timestamp, expires_in } = token;
 	const millisecondsElapsed = Date.now() - Number(timestamp);
 	return millisecondsElapsed / 1000 > Number(expires_in);
