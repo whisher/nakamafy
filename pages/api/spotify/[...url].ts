@@ -34,7 +34,10 @@ const SpotifyApi = async (req: NextApiRequest, res: NextApiResponse<unknown>) =>
 			throw new Error('Invalid spotify api token');
 		}
 		const tokenJson = decodeBase64(strB64);
-		const token = JSON.parse(tokenJson) as TokenDto;
+		const token = JSON.parse(tokenJson) as Pick<
+			TokenDto,
+			'access_token' | 'timestamp' | 'expires_in'
+		>;
 		const { access_token } = token;
 
 		if (req.method === 'POST') {
