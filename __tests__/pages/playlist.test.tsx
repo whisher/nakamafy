@@ -1,5 +1,7 @@
 import { screen, fireEvent } from '@testing-library/react';
+import { rest } from 'msw';
 import { server } from '../../_msw';
+import { playListResponseWithItems } from '../../_msw/fixtures';
 import { renderWithProviders } from '../../_msw/test-utils';
 
 import Playlist from '../../pages/playlist/[id]';
@@ -29,10 +31,18 @@ describe('Profile', () => {
 			.querySelector('li')
 			?.querySelector('button') as HTMLButtonElement;
 		fireEvent.click(addButton);
+		server.use(
+			rest.get(
+				`${process.env.NEXT_PUBLIC_BASE_URL}/api/spotify/playlists/abcd`,
+				async (req, res, ctx) => {
+					return res(ctx.status(500), ctx.json(playListResponseWithItems));
+				}
+			)
+		);
 		// Todo
-		//const playlistParentItems = await screen.findByTestId('playlist-parent-items');
-		//expect(playlistParentItems).toBeInstanceOf(HTMLElement);
-		//expect(playlistParentItems.children).toHaveLength(1);
+		const playlistParentItems = await screen.findByTestId('playlist-parent-items');
+		expect(playlistParentItems).toBeInstanceOf(HTMLElement);
+		expect(playlistParentItems.children).toHaveLength(1);
 	});
 });
 

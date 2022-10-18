@@ -16,7 +16,7 @@ const PlaylistTracks: React.FC<SearchSwitcherTrackProps> = ({ data }) => {
 		return null;
 	}
 	return (
-		<div data-testid="playlist-parent-items" className="mt-3 px-3">
+		<div className="mt-3 px-3">
 			<div className="flex items-center mt-4 pb-2 border-b border-white/10 text-xs text-white/60">
 				<div className="w-5/12">
 					<span className="inline-block text-center pr-3">#</span>
@@ -34,7 +34,7 @@ const PlaylistTracks: React.FC<SearchSwitcherTrackProps> = ({ data }) => {
 			</div>
 			<section>
 				<article>
-					<ul className="group flex flex-col gap-3 mt-6">
+					<ul data-testid="playlist-parent-items" className="group flex flex-col gap-3 mt-6">
 						{items.map(({ added_at, track: { id, album, artists, duration_ms, name } }, i) => (
 							<li className="flex items-center hover:bg-[#2a2a2a]" key={id}>
 								<div className="w-5/12 flex items-center">

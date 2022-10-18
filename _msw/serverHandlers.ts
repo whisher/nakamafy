@@ -1,4 +1,5 @@
 import { rest } from 'msw';
+import { playListResponse } from './fixtures';
 
 const handlers = [
 	rest.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/spotify/me`, (req, res, ctx) => {
@@ -20,39 +21,7 @@ const handlers = [
 		return res(ctx.json(mockApiResponse));
 	}),
 	rest.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/spotify/playlists/abcd`, (req, res, ctx) => {
-		const mockApiResponse = {
-			collaborative: false,
-			description: '',
-			external_urls: { spotify: '' },
-			followers: { href: null, total: 0 },
-			href: '',
-			id: 'abcd',
-			images: [],
-			name: 'My Playlist #1',
-			owner: {
-				display_name: 'user text',
-				external_urls: { spotify: '' },
-				href: '',
-				id: '',
-				type: 'user',
-				uri: 'spotify:user:efde'
-			},
-			primary_color: null,
-			public: false,
-			snapshot_id: '',
-			tracks: {
-				href: '',
-				items: [],
-				limit: 100,
-				next: null,
-				offset: 0,
-				previous: null,
-				total: 0
-			},
-			type: 'playlist',
-			uri: 'spotify:playlist:abcd'
-		};
-		return res(ctx.json(mockApiResponse));
+		return res(ctx.json(playListResponse));
 	}),
 	rest.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/spotify/search`, (req, res, ctx) => {
 		const mockApiResponse = {
